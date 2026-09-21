@@ -1337,12 +1337,17 @@ html&gt;body{padding:0}&lt;/style&gt;
       &lt;div class=&quot;mk-label&quot; data-minor-label&gt;Submatriks minor (1, 1)&lt;/div&gt;
       &lt;div class=&quot;mk-matrix mk-small tabular-nums&quot; data-minor&gt;&lt;/div&gt;
     &lt;/section&gt;
+    &lt;section aria-label=&quot;Minor dari submatriks B&quot;&gt;
+      &lt;div class=&quot;mk-label&quot; data-nested-label&gt;Minor B · 2 × 2&lt;/div&gt;
+      &lt;div class=&quot;mk-matrix mk-tiny tabular-nums&quot; data-nested&gt;&lt;/div&gt;
+    &lt;/section&gt;
   &lt;/div&gt;
   &lt;div class=&quot;mk-legend text-small&quot;&gt;
     &lt;span&gt;&lt;i class=&quot;mk-key mk-kept-key&quot;&gt;&lt;/i&gt;Dipertahankan&lt;/span&gt;
     &lt;span&gt;&lt;i class=&quot;mk-key mk-cut-key&quot;&gt;&lt;/i&gt;Baris / kolom dihapus&lt;/span&gt;
   &lt;/div&gt;
   &lt;div class=&quot;mk-result tabular-nums&quot; aria-live=&quot;polite&quot; data-result&gt;&lt;/div&gt;
+  &lt;div class=&quot;mk-result mk-nested-result tabular-nums&quot; aria-live=&quot;polite&quot; data-nested-result&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;style&gt;
 #minor-kofaktor-interaktif .mk-layout {display:flex;flex-wrap:wrap;gap:32px;align-items:center;margin:20px 0;}
@@ -1351,6 +1356,8 @@ html&gt;body{padding:0}&lt;/style&gt;
 #minor-kofaktor-interaktif .mk-matrix {display:grid;gap:6px;border-left:2px solid var(--foreground);border-right:2px solid var(--foreground);padding:8px;}
 #minor-kofaktor-interaktif .mk-original {grid-template-columns:repeat(4,48px);}
 #minor-kofaktor-interaktif .mk-small {grid-template-columns:repeat(3,44px);}
+#minor-kofaktor-interaktif .mk-tiny {grid-template-columns:repeat(2,44px);}
+#minor-kofaktor-interaktif .mk-nested-result {margin-top:12px;}
 #minor-kofaktor-interaktif .mk-cell {position:relative;display:grid;min-height:44px;transition:background-color 350ms;}
 #minor-kofaktor-interaktif .mk-cell.kept {background:color-mix(in srgb,var(--viz-series-1) 20%,transparent);}
 #minor-kofaktor-interaktif .mk-cell::after {content:&quot;&quot;;position:absolute;left:4px;right:4px;top:50%;height:2px;background:var(--viz-series-2);transform:scaleX(0) rotate(-20deg);transition:transform 350ms;pointer-events:none;}
@@ -1373,6 +1380,11 @@ html&gt;body{padding:0}&lt;/style&gt;
  const minor=root.querySelector(&#x27;[data-minor]&#x27;);
  const result=root.querySelector(&#x27;[data-result]&#x27;);
  const label=root.querySelector(&#x27;[data-minor-label]&#x27;);
+ const nested=root.querySelector(&#x27;[data-nested]&#x27;);
+ const nestedLabel=root.querySelector(&#x27;[data-nested-label]&#x27;);
+ const nestedResult=root.querySelector(&#x27;[data-nested-result]&#x27;);
+ const subcells=[];
+ let sub=[],subSelection=[0,0],nestedM=0,nestedC=0;
  const cells=[];
  const det3=m=&gt;m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])-m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])+m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
  let selection=[0,0];
@@ -1390,19 +1402,37 @@ html&gt;body{padding:0}&lt;/style&gt;
      wrap.classList.toggle(&#x27;cut&#x27;,i===r||j===c);
      button.setAttribute(&#x27;aria-pressed&#x27;,String(i===r&amp;&amp;j===c));
    });
-   const sub=A.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c));
-   minor.replaceChildren();
-   sub.flat().forEach(n=&gt;{const entry=document.createElement(&#x27;span&#x27;);entry.className=&#x27;mk-entry&#x27;;entry.textContent=n;minor.append(entry);});
-   label.textContent=`Submatriks minor (${r+1}, ${c+1})`;
+   sub=A.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c));
+   if(!subcells.length)sub.forEach((row,i)=&gt;row.forEach((n,j)=&gt;{
+     const wrap=document.createElement(&#x27;div&#x27;);wrap.className=&#x27;mk-cell&#x27;;
+     const button=document.createElement(&#x27;button&#x27;);button.type=&#x27;button&#x27;;button.className=&#x27;btn btn-ghost viz-tile tabular-nums&#x27;;
+     button.addEventListener(&#x27;click&#x27;,()=&gt;{renderSub(i,j,true);save();});
+     wrap.append(button);minor.append(wrap);subcells.push({wrap,button,i,j});
+   }));
+   subcells.forEach(({button,i,j})=&gt;{button.textContent=sub[i][j];button.setAttribute(&#x27;aria-label&#x27;,`Pilih elemen ${sub[i][j]} pada B, baris ${i+1}, kolom ${j+1}`);});
+   label.textContent=`B · minor A (${r+1}, ${c+1})`;
+   renderSub(...subSelection,animate);
    const M=det3(sub),sign=(r+c)%2===0?1:-1,C=sign*M||0;
-   result.innerHTML=`&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = ${M}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × ${M} = ${C}&lt;/span&gt;`;
+   result.innerHTML=`&lt;span&gt;A:&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = det(B) = ${M}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × ${M} = ${C}&lt;/span&gt;`;
    if(animate&amp;&amp;!matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches){
      minor.animate([{transform:&#x27;translateY(8px)&#x27;},{transform:&#x27;translateY(0)&#x27;}],{duration:350,easing:&#x27;ease-out&#x27;});
      result.animate([{transform:&#x27;translateX(5px)&#x27;},{transform:&#x27;translateX(0)&#x27;}],{duration:350,easing:&#x27;ease-out&#x27;});
    }
  }
- function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{baris:selection[0]+1,kolom:selection[1]+1,minor:0,kofaktor:0},privateContent:{selection}}).catch(()=&gt;{});}
- function restore(state){const s=state?.privateContent?.selection;if(Array.isArray(s)&amp;&amp;s.length===2&amp;&amp;s.every(n=&gt;Number.isInteger(n)&amp;&amp;n&gt;=0&amp;&amp;n&lt;4))render(s[0],s[1]);else render(0,0);}
+ function renderSub(r,c,animate=false){
+   subSelection=[r,c];
+   subcells.forEach(({wrap,button,i,j})=&gt;{wrap.classList.toggle(&#x27;kept&#x27;,i!==r&amp;&amp;j!==c);wrap.classList.toggle(&#x27;cut&#x27;,i===r||j===c);button.setAttribute(&#x27;aria-pressed&#x27;,String(i===r&amp;&amp;j===c));});
+   const m=sub.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c));
+   nested.replaceChildren();
+   m.flat().forEach(n=&gt;{const entry=document.createElement(&#x27;span&#x27;);entry.className=&#x27;mk-entry&#x27;;entry.textContent=n;nested.append(entry);});
+   nestedM=m[0][0]*m[1][1]-m[0][1]*m[1][0];
+   const sign=(r+c)%2===0?1:-1;nestedC=sign*nestedM||0;
+   nestedLabel.textContent=`Minor B (${r+1}, ${c+1}) · 2 × 2`;
+   nestedResult.innerHTML=`&lt;span&gt;B:&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = ${m[0][0]} × ${m[1][1]} − ${m[0][1]} × ${m[1][0]} = ${nestedM}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × (${nestedM}) = ${nestedC}&lt;/span&gt;`;
+   if(animate&amp;&amp;!matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches)nested.animate([{transform:&#x27;translateY(8px)&#x27;},{transform:&#x27;translateY(0)&#x27;}],{duration:350,easing:&#x27;ease-out&#x27;});
+ }
+ function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{baris:selection[0]+1,kolom:selection[1]+1,minor:0,kofaktor:0,submatriks:{baris:subSelection[0]+1,kolom:subSelection[1]+1,minor:nestedM,kofaktor:nestedC}},privateContent:{selection,subSelection}}).catch(()=&gt;{});}
+ function restore(state){const valid=(s,n)=&gt;Array.isArray(s)&amp;&amp;s.length===2&amp;&amp;s.every(v=&gt;Number.isInteger(v)&amp;&amp;v&gt;=0&amp;&amp;v&lt;n);const s=state?.privateContent?.selection,t=state?.privateContent?.subSelection;subSelection=valid(t,3)?t:[0,0];if(valid(s,4))render(s[0],s[1]);else render(0,0);}
  restore(window.openai?.widgetState);
  window.addEventListener(&#x27;openai:set_globals&#x27;,event=&gt;{if(event.detail?.globals?.widgetState)restore(event.detail.globals.widgetState);});
 })();
