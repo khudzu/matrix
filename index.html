@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Minor dan Kofaktor Interaktif</title>
+<title>Latihan Minor dan Kofaktor</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Minor dan Kofaktor Interaktif" data-srcdoc="&lt;!doctype html&gt;
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Latihan Minor dan Kofaktor" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Minor dan Kofaktor Interaktif&lt;/title&gt;
+&lt;title&gt;Latihan Minor dan Kofaktor&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(
@@ -1328,6 +1328,21 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/script&gt;
 &lt;div id=&quot;minor-kofaktor-interaktif&quot;&gt;
   &lt;h3&gt;Minor dan kofaktor matriks 4 × 4&lt;/h3&gt;
+  &lt;div class=&quot;viz-controls&quot;&gt;
+    &lt;label class=&quot;form-label&quot;&gt;Jenis soal&lt;select class=&quot;form-select&quot; data-kind&gt;&lt;option value=&quot;det&quot;&gt;Determinan A&lt;/option&gt;&lt;option value=&quot;minor&quot;&gt;Minor A&lt;/option&gt;&lt;option value=&quot;cofactor&quot;&gt;Kofaktor A&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-generate&gt;Buat soal baru&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-original-reset&gt;Matriks awal&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div data-quiz hidden&gt;
+    &lt;h3 data-question&gt;&lt;/h3&gt;
+    &lt;form class=&quot;viz-controls&quot; data-answer-form&gt;
+      &lt;label class=&quot;form-label&quot;&gt;Jawaban&lt;input class=&quot;form-control&quot; type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; data-answer placeholder=&quot;Masukkan hasil perhitungan&quot;&gt;&lt;/label&gt;
+      &lt;button class=&quot;btn btn-primary&quot; type=&quot;submit&quot;&gt;Cek jawaban&lt;/button&gt;
+      &lt;button class=&quot;btn&quot; type=&quot;button&quot; data-reveal&gt;Tampilkan pembahasan&lt;/button&gt;
+    &lt;/form&gt;
+    &lt;div role=&quot;status&quot; aria-live=&quot;polite&quot; data-feedback&gt;&lt;/div&gt;
+    &lt;div class=&quot;mk-nested-result tabular-nums&quot; data-solution hidden&gt;&lt;/div&gt;
+  &lt;/div&gt;
   &lt;div class=&quot;mk-layout&quot;&gt;
     &lt;section aria-label=&quot;Matriks asal&quot;&gt;
       &lt;div class=&quot;mk-label&quot;&gt;Matriks A · pilih elemen&lt;/div&gt;
@@ -1369,13 +1384,16 @@ html&gt;body{padding:0}&lt;/style&gt;
 #minor-kofaktor-interaktif .mk-kept-key {background:color-mix(in srgb,var(--viz-series-1) 35%,transparent);}
 #minor-kofaktor-interaktif .mk-cut-key {height:2px;background:var(--viz-series-2);transform:rotate(-20deg);}
 #minor-kofaktor-interaktif .mk-result {display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+#minor-kofaktor-interaktif [hidden] {display:none!important;}
 #minor-kofaktor-interaktif .mk-value {padding:6px 8px;background:color-mix(in srgb,var(--viz-series-1) 20%,transparent);color:var(--foreground);}
 @media(prefers-reduced-motion:reduce){#minor-kofaktor-interaktif .mk-cell,#minor-kofaktor-interaktif .mk-cell::after{transition:none;}}
 &lt;/style&gt;
 &lt;script&gt;
 (() =&gt; {
  const root=document.getElementById(&#x27;minor-kofaktor-interaktif&#x27;);
- const A=Array.from({length:4},(_,i)=&gt;Array.from({length:4},(_,j)=&gt;10*(i+1)+j+1));
+ const initial=()=&gt;Array.from({length:4},(_,i)=&gt;Array.from({length:4},(_,j)=&gt;10*(i+1)+j+1));
+ let A=initial(),quiz=null,revealed=false;
+ const kind=root.querySelector(&#x27;[data-kind]&#x27;),quizBox=root.querySelector(&#x27;[data-quiz]&#x27;),question=root.querySelector(&#x27;[data-question]&#x27;),answer=root.querySelector(&#x27;[data-answer]&#x27;),feedback=root.querySelector(&#x27;[data-feedback]&#x27;),solution=root.querySelector(&#x27;[data-solution]&#x27;),reveal=root.querySelector(&#x27;[data-reveal]&#x27;);
  const original=root.querySelector(&#x27;[data-original]&#x27;);
  const minor=root.querySelector(&#x27;[data-minor]&#x27;);
  const result=root.querySelector(&#x27;[data-result]&#x27;);
@@ -1398,6 +1416,7 @@ html&gt;body{padding:0}&lt;/style&gt;
  function render(r,c,animate=false){
    selection=[r,c];
    cells.forEach(({wrap,button,i,j})=&gt;{
+     button.textContent=A[i][j];button.setAttribute(&#x27;aria-label&#x27;,`Pilih elemen ${A[i][j]}, baris ${i+1}, kolom ${j+1}`);
      wrap.classList.toggle(&#x27;kept&#x27;,i!==r&amp;&amp;j!==c);
      wrap.classList.toggle(&#x27;cut&#x27;,i===r||j===c);
      button.setAttribute(&#x27;aria-pressed&#x27;,String(i===r&amp;&amp;j===c));
@@ -1431,8 +1450,32 @@ html&gt;body{padding:0}&lt;/style&gt;
    nestedResult.innerHTML=`&lt;span&gt;B:&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = ${m[0][0]} × ${m[1][1]} − ${m[0][1]} × ${m[1][0]} = ${nestedM}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × (${nestedM}) = ${nestedC}&lt;/span&gt;`;
    if(animate&amp;&amp;!matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches)nested.animate([{transform:&#x27;translateY(8px)&#x27;},{transform:&#x27;translateY(0)&#x27;}],{duration:350,easing:&#x27;ease-out&#x27;});
  }
- function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{baris:selection[0]+1,kolom:selection[1]+1,minor:0,kofaktor:0,submatriks:{baris:subSelection[0]+1,kolom:subSelection[1]+1,minor:nestedM,kofaktor:nestedC}},privateContent:{selection,subSelection}}).catch(()=&gt;{});}
- function restore(state){const valid=(s,n)=&gt;Array.isArray(s)&amp;&amp;s.length===2&amp;&amp;s.every(v=&gt;Number.isInteger(v)&amp;&amp;v&gt;=0&amp;&amp;v&lt;n);const s=state?.privateContent?.selection,t=state?.privateContent?.subSelection;subSelection=valid(t,3)?t:[0,0];if(valid(s,4))render(s[0],s[1]);else render(0,0);}
+ function minorAt(r,c){return det3(A.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c)));}
+ function cofAt(r,c){return ((r+c)%2?-1:1)*minorAt(r,c)||0;}
+ function expected(){return quiz.kind===&#x27;det&#x27;?A[0].reduce((sum,v,j)=&gt;sum+v*cofAt(0,j),0):quiz.kind===&#x27;minor&#x27;?minorAt(quiz.r,quiz.c):cofAt(quiz.r,quiz.c);}
+ function syncQuiz(){
+   quizBox.hidden=!quiz;result.hidden=!!quiz&amp;&amp;!revealed;nestedResult.hidden=!!quiz&amp;&amp;!revealed;solution.hidden=!quiz||!revealed;
+   if(!quiz)return;
+   const {r,c}=quiz;
+   question.textContent=quiz.kind===&#x27;det&#x27;?&#x27;Hitung determinan matriks A.&#x27;:`Hitung ${quiz.kind===&#x27;minor&#x27;?&#x27;minor M&#x27;:&#x27;kofaktor C&#x27;}(${r+1}, ${c+1}) matriks A.`;
+   reveal.textContent=revealed?&#x27;Sembunyikan pembahasan&#x27;:&#x27;Tampilkan pembahasan&#x27;;
+   if(quiz.kind===&#x27;det&#x27;)solution.textContent=&#x27;Ekspansi baris pertama: &#x27;+A[0].map((v,j)=&gt;`(${v}) × (${cofAt(0,j)})`).join(&#x27; + &#x27;)+` = ${expected()}.`;
+   else solution.textContent=`Hapus baris ${r+1} dan kolom ${c+1}: M(${r+1}, ${c+1}) = ${minorAt(r,c)}. `+(quiz.kind===&#x27;cofactor&#x27;?`C(${r+1}, ${c+1}) = (−1)^${r+c+2} × (${minorAt(r,c)}) = ${expected()}.`:&#x27;&#x27;);
+ }
+ root.querySelector(&#x27;[data-generate]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{
+   A=Array.from({length:4},()=&gt;Array.from({length:4},()=&gt;Math.floor(Math.random()*10)-4));
+   quiz={kind:kind.value,r:Math.floor(Math.random()*4),c:Math.floor(Math.random()*4)};revealed=false;answer.value=&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=[0,0];render(quiz.r,quiz.c,true);syncQuiz();save();
+ });
+ root.querySelector(&#x27;[data-original-reset]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{A=initial();quiz=null;revealed=false;answer.value=&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;render(0,0,true);syncQuiz();save();});
+ root.querySelector(&#x27;[data-answer-form]&#x27;).addEventListener(&#x27;submit&#x27;,event=&gt;{
+   event.preventDefault();if(!quiz)return;
+   const raw=answer.value.trim().replace(/−/g,&#x27;-&#x27;).replace(&#x27;,&#x27;,&#x27;.&#x27;);
+   if(!/^[+-]?\d+(?:\.\d+)?$/.test(raw)||!Number.isFinite(Number(raw))){feedback.textContent=&#x27;Masukkan jawaban berupa angka terlebih dahulu.&#x27;;return;}
+   feedback.textContent=Number(raw)===expected()?&#x27;✓ Benar! Jawaban sesuai.&#x27;:&#x27;✗ Salah. Coba hitung kembali atau buka pembahasan.&#x27;;save();
+ });
+ reveal.addEventListener(&#x27;click&#x27;,()=&gt;{revealed=!revealed;syncQuiz();save();});
+ function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{matriks:A,soal:quiz,jawaban:answer.value,hasil:feedback.textContent,baris:selection[0]+1,kolom:selection[1]+1,minor:minorAt(...selection),kofaktor:cofAt(...selection),submatriks:{baris:subSelection[0]+1,kolom:subSelection[1]+1,minor:nestedM,kofaktor:nestedC}},privateContent:{selection,subSelection,A,quiz,revealed,answer:answer.value}}).catch(()=&gt;{});}
+ function restore(state){const valid=(s,n)=&gt;Array.isArray(s)&amp;&amp;s.length===2&amp;&amp;s.every(v=&gt;Number.isInteger(v)&amp;&amp;v&gt;=0&amp;&amp;v&lt;n);const p=state?.privateContent||{},s=p.selection,t=p.subSelection;if(Array.isArray(p.A)&amp;&amp;p.A.length===4&amp;&amp;p.A.every(row=&gt;Array.isArray(row)&amp;&amp;row.length===4&amp;&amp;row.every(v=&gt;Number.isInteger(v)&amp;&amp;Math.abs(v)&lt;100)))A=p.A;else A=initial();quiz=p.quiz&amp;&amp;[&#x27;det&#x27;,&#x27;minor&#x27;,&#x27;cofactor&#x27;].includes(p.quiz.kind)&amp;&amp;valid([p.quiz.r,p.quiz.c],4)?p.quiz:null;revealed=p.revealed===true;answer.value=typeof p.answer===&#x27;string&#x27;?p.answer:&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=valid(t,3)?t:[0,0];if(valid(s,4))render(s[0],s[1]);else render(0,0);syncQuiz();}
  restore(window.openai?.widgetState);
  window.addEventListener(&#x27;openai:set_globals&#x27;,event=&gt;{if(event.detail?.globals?.widgetState)restore(event.detail.globals.widgetState);});
 })();
