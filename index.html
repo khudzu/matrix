@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Latihan Minor dan Kofaktor</title>
+<title>Latihan Matriks 3x3, Eigen, Minor dan Kofaktor</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Latihan Minor dan Kofaktor" data-srcdoc="&lt;!doctype html&gt;
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Latihan Matriks 3x3, Eigen, Minor dan Kofaktor" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Latihan Minor dan Kofaktor&lt;/title&gt;
+&lt;title&gt;Latihan Matriks 3x3, Eigen, Minor dan Kofaktor&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(
@@ -1327,16 +1327,17 @@ html&gt;body{padding:0}&lt;/style&gt;
 })();
 &lt;/script&gt;
 &lt;div id=&quot;minor-kofaktor-interaktif&quot;&gt;
-  &lt;h3&gt;Minor dan kofaktor matriks 4 × 4&lt;/h3&gt;
+  &lt;h3&gt;Latihan matriks 3 × 3&lt;/h3&gt;
   &lt;div class=&quot;viz-controls&quot;&gt;
-    &lt;label class=&quot;form-label&quot;&gt;Jenis soal&lt;select class=&quot;form-select&quot; data-kind&gt;&lt;option value=&quot;det&quot;&gt;Determinan A&lt;/option&gt;&lt;option value=&quot;minor&quot;&gt;Minor A&lt;/option&gt;&lt;option value=&quot;cofactor&quot;&gt;Kofaktor A&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+    &lt;label class=&quot;form-label&quot;&gt;Jenis soal&lt;select class=&quot;form-select&quot; data-kind&gt;&lt;option value=&quot;det&quot;&gt;Determinan A&lt;/option&gt;&lt;option value=&quot;minor&quot;&gt;Minor A&lt;/option&gt;&lt;option value=&quot;cofactor&quot;&gt;Kofaktor A&lt;/option&gt;&lt;option value=&quot;eigenvalue&quot;&gt;Nilai eigen A&lt;/option&gt;&lt;option value=&quot;eigenvector&quot;&gt;Vektor eigen A&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-generate&gt;Buat soal baru&lt;/button&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-original-reset&gt;Matriks awal&lt;/button&gt;
   &lt;/div&gt;
   &lt;div data-quiz hidden&gt;
     &lt;h3 data-question&gt;&lt;/h3&gt;
+    &lt;div class=&quot;text-small&quot; data-answer-hint&gt;&lt;/div&gt;
     &lt;form class=&quot;viz-controls&quot; data-answer-form&gt;
-      &lt;label class=&quot;form-label&quot;&gt;Jawaban&lt;input class=&quot;form-control&quot; type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; data-answer placeholder=&quot;Masukkan hasil perhitungan&quot;&gt;&lt;/label&gt;
+      &lt;label class=&quot;form-label&quot;&gt;Jawaban&lt;input class=&quot;form-control&quot; type=&quot;text&quot; autocomplete=&quot;off&quot; data-answer placeholder=&quot;Masukkan hasil perhitungan&quot;&gt;&lt;/label&gt;
       &lt;button class=&quot;btn btn-primary&quot; type=&quot;submit&quot;&gt;Cek jawaban&lt;/button&gt;
       &lt;button class=&quot;btn&quot; type=&quot;button&quot; data-reveal&gt;Tampilkan pembahasan&lt;/button&gt;
     &lt;/form&gt;
@@ -1344,8 +1345,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;div class=&quot;mk-nested-result tabular-nums&quot; data-solution hidden&gt;&lt;/div&gt;
   &lt;/div&gt;
   &lt;div class=&quot;mk-layout&quot;&gt;
+    &lt;section data-eigen-original-panel hidden aria-label=&quot;Matriks soal A&quot;&gt;
+      &lt;div class=&quot;mk-label&quot;&gt;Matriks soal A&lt;/div&gt;
+      &lt;div class=&quot;mk-matrix mk-original tabular-nums&quot; data-eigen-original&gt;&lt;/div&gt;
+    &lt;/section&gt;
     &lt;section aria-label=&quot;Matriks asal&quot;&gt;
-      &lt;div class=&quot;mk-label&quot;&gt;Matriks A · pilih elemen&lt;/div&gt;
+      &lt;div class=&quot;mk-label&quot; data-original-label&gt;Matriks A · pilih elemen&lt;/div&gt;
       &lt;div class=&quot;mk-matrix mk-original&quot; data-original&gt;&lt;/div&gt;
     &lt;/section&gt;
     &lt;section aria-label=&quot;Submatriks yang tersisa&quot;&gt;
@@ -1353,7 +1358,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       &lt;div class=&quot;mk-matrix mk-small tabular-nums&quot; data-minor&gt;&lt;/div&gt;
     &lt;/section&gt;
     &lt;section aria-label=&quot;Minor dari submatriks B&quot;&gt;
-      &lt;div class=&quot;mk-label&quot; data-nested-label&gt;Minor B · 2 × 2&lt;/div&gt;
+      &lt;div class=&quot;mk-label&quot; data-nested-label&gt;Minor B · 1 × 1&lt;/div&gt;
       &lt;div class=&quot;mk-matrix mk-tiny tabular-nums&quot; data-nested&gt;&lt;/div&gt;
     &lt;/section&gt;
   &lt;/div&gt;
@@ -1369,9 +1374,9 @@ html&gt;body{padding:0}&lt;/style&gt;
 #minor-kofaktor-interaktif section {min-width:0;}
 #minor-kofaktor-interaktif .mk-label {margin-bottom:12px;font-weight:500;}
 #minor-kofaktor-interaktif .mk-matrix {display:grid;gap:6px;border-left:2px solid var(--foreground);border-right:2px solid var(--foreground);padding:8px;}
-#minor-kofaktor-interaktif .mk-original {grid-template-columns:repeat(4,48px);}
-#minor-kofaktor-interaktif .mk-small {grid-template-columns:repeat(3,44px);}
-#minor-kofaktor-interaktif .mk-tiny {grid-template-columns:repeat(2,44px);}
+#minor-kofaktor-interaktif .mk-original {grid-template-columns:repeat(3,72px);}
+#minor-kofaktor-interaktif .mk-small {grid-template-columns:repeat(2,72px);}
+#minor-kofaktor-interaktif .mk-tiny {grid-template-columns:repeat(1,72px);}
 #minor-kofaktor-interaktif .mk-nested-result {margin-top:12px;}
 #minor-kofaktor-interaktif .mk-cell {position:relative;display:grid;min-height:44px;transition:background-color 350ms;}
 #minor-kofaktor-interaktif .mk-cell.kept {background:color-mix(in srgb,var(--viz-series-1) 20%,transparent);}
@@ -1391,9 +1396,14 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;script&gt;
 (() =&gt; {
  const root=document.getElementById(&#x27;minor-kofaktor-interaktif&#x27;);
- const initial=()=&gt;Array.from({length:4},(_,i)=&gt;Array.from({length:4},(_,j)=&gt;10*(i+1)+j+1));
+ const initial=()=&gt;Array.from({length:3},(_,i)=&gt;Array.from({length:3},(_,j)=&gt;10*(i+1)+j+1));
  let A=initial(),quiz=null,revealed=false;
  const kind=root.querySelector(&#x27;[data-kind]&#x27;),quizBox=root.querySelector(&#x27;[data-quiz]&#x27;),question=root.querySelector(&#x27;[data-question]&#x27;),answer=root.querySelector(&#x27;[data-answer]&#x27;),feedback=root.querySelector(&#x27;[data-feedback]&#x27;),solution=root.querySelector(&#x27;[data-solution]&#x27;),reveal=root.querySelector(&#x27;[data-reveal]&#x27;);
+ const hint=root.querySelector(&#x27;[data-answer-hint]&#x27;);
+ const isEigen=()=&gt;quiz&amp;&amp;[&#x27;eigenvalue&#x27;,&#x27;eigenvector&#x27;].includes(quiz.kind);
+ const workMatrix=()=&gt;!isEigen()?A:A.map((row,i)=&gt;row.map((v,j)=&gt;i!==j?v:quiz.kind===&#x27;eigenvalue&#x27;?`(${v} − λ)`:v-quiz.lambda));
+ const symbolic=()=&gt;quiz?.kind===&#x27;eigenvalue&#x27;;
+ const det2=m=&gt;m[0][0]*m[1][1]-m[0][1]*m[1][0];
  const original=root.querySelector(&#x27;[data-original]&#x27;);
  const minor=root.querySelector(&#x27;[data-minor]&#x27;);
  const result=root.querySelector(&#x27;[data-result]&#x27;);
@@ -1415,13 +1425,14 @@ html&gt;body{padding:0}&lt;/style&gt;
  }));
  function render(r,c,animate=false){
    selection=[r,c];
+   const W=workMatrix();
    cells.forEach(({wrap,button,i,j})=&gt;{
-     button.textContent=A[i][j];button.setAttribute(&#x27;aria-label&#x27;,`Pilih elemen ${A[i][j]}, baris ${i+1}, kolom ${j+1}`);
+     button.textContent=W[i][j];button.setAttribute(&#x27;aria-label&#x27;,`Pilih elemen ${W[i][j]}, baris ${i+1}, kolom ${j+1}`);
      wrap.classList.toggle(&#x27;kept&#x27;,i!==r&amp;&amp;j!==c);
      wrap.classList.toggle(&#x27;cut&#x27;,i===r||j===c);
      button.setAttribute(&#x27;aria-pressed&#x27;,String(i===r&amp;&amp;j===c));
    });
-   sub=A.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c));
+   sub=W.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c));
    if(!subcells.length)sub.forEach((row,i)=&gt;row.forEach((n,j)=&gt;{
      const wrap=document.createElement(&#x27;div&#x27;);wrap.className=&#x27;mk-cell&#x27;;
      const button=document.createElement(&#x27;button&#x27;);button.type=&#x27;button&#x27;;button.className=&#x27;btn btn-ghost viz-tile tabular-nums&#x27;;
@@ -1429,10 +1440,11 @@ html&gt;body{padding:0}&lt;/style&gt;
      wrap.append(button);minor.append(wrap);subcells.push({wrap,button,i,j});
    }));
    subcells.forEach(({button,i,j})=&gt;{button.textContent=sub[i][j];button.setAttribute(&#x27;aria-label&#x27;,`Pilih elemen ${sub[i][j]} pada B, baris ${i+1}, kolom ${j+1}`);});
-   label.textContent=`B · minor A (${r+1}, ${c+1})`;
+   label.textContent=`B · submatriks (${r+1}, ${c+1}) · 2 × 2`;
    renderSub(...subSelection,animate);
-   const M=det3(sub),sign=(r+c)%2===0?1:-1,C=sign*M||0;
-   result.innerHTML=`&lt;span&gt;A:&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = det(B) = ${M}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × ${M} = ${C}&lt;/span&gt;`;
+   const M=det2(sub),sign=(r+c)%2===0?1:-1,C=sign*M||0;
+   const expr=`${sub[0][0]} × ${sub[1][1]} − ${sub[0][1]} × ${sub[1][0]}`;
+   result.innerHTML=`&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = ${expr}${symbolic()?&#x27;&#x27;:` = ${M}`}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt;${symbolic()?&#x27;&#x27;:` = ${C}`}&lt;/span&gt;`;
    if(animate&amp;&amp;!matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches){
      minor.animate([{transform:&#x27;translateY(8px)&#x27;},{transform:&#x27;translateY(0)&#x27;}],{duration:350,easing:&#x27;ease-out&#x27;});
      result.animate([{transform:&#x27;translateX(5px)&#x27;},{transform:&#x27;translateX(0)&#x27;}],{duration:350,easing:&#x27;ease-out&#x27;});
@@ -1444,38 +1456,94 @@ html&gt;body{padding:0}&lt;/style&gt;
    const m=sub.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c));
    nested.replaceChildren();
    m.flat().forEach(n=&gt;{const entry=document.createElement(&#x27;span&#x27;);entry.className=&#x27;mk-entry&#x27;;entry.textContent=n;nested.append(entry);});
-   nestedM=m[0][0]*m[1][1]-m[0][1]*m[1][0];
-   const sign=(r+c)%2===0?1:-1;nestedC=sign*nestedM||0;
-   nestedLabel.textContent=`Minor B (${r+1}, ${c+1}) · 2 × 2`;
-   nestedResult.innerHTML=`&lt;span&gt;B:&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = ${m[0][0]} × ${m[1][1]} − ${m[0][1]} × ${m[1][0]} = ${nestedM}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × (${nestedM}) = ${nestedC}&lt;/span&gt;`;
+   nestedM=m[0][0];
+   const sign=(r+c)%2===0?1:-1;nestedC=symbolic()?`(${sign}) × ${nestedM}`:sign*nestedM||0;
+   nestedLabel.textContent=`Minor B (${r+1}, ${c+1}) · 1 × 1`;
+   nestedResult.innerHTML=`&lt;span&gt;B:&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;M&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = ${nestedM}&lt;/span&gt;&lt;span class=&quot;mk-value&quot;&gt;C&lt;sub&gt;${r+1}${c+1}&lt;/sub&gt; = (${sign===1?&#x27;+1&#x27;:&#x27;−1&#x27;}) × (${nestedM})${symbolic()?&#x27;&#x27;:` = ${nestedC}`}&lt;/span&gt;`;
    if(animate&amp;&amp;!matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches)nested.animate([{transform:&#x27;translateY(8px)&#x27;},{transform:&#x27;translateY(0)&#x27;}],{duration:350,easing:&#x27;ease-out&#x27;});
  }
- function minorAt(r,c){return det3(A.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c)));}
+ function minorAt(r,c){return det2(A.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c)));}
  function cofAt(r,c){return ((r+c)%2?-1:1)*minorAt(r,c)||0;}
  function expected(){return quiz.kind===&#x27;det&#x27;?A[0].reduce((sum,v,j)=&gt;sum+v*cofAt(0,j),0):quiz.kind===&#x27;minor&#x27;?minorAt(quiz.r,quiz.c):cofAt(quiz.r,quiz.c);}
  function syncQuiz(){
-   quizBox.hidden=!quiz;result.hidden=!!quiz&amp;&amp;!revealed;nestedResult.hidden=!!quiz&amp;&amp;!revealed;solution.hidden=!quiz||!revealed;
+   quizBox.hidden=!quiz;result.hidden=false;nestedResult.hidden=false;solution.hidden=!quiz||!revealed;
+   minor.parentElement.hidden=false;nested.parentElement.hidden=false;root.querySelector(&#x27;.mk-legend&#x27;).hidden=false;
+   root.querySelector(&#x27;[data-original-label]&#x27;).textContent=isEigen()?quiz.kind===&#x27;eigenvalue&#x27;?&#x27;A − λI · pilih elemen&#x27;:`A − (${quiz.lambda})I · pilih elemen`:&#x27;Matriks A · pilih elemen&#x27;;
+   const originalA=root.querySelector(&#x27;[data-eigen-original]&#x27;);originalA.hidden=!isEigen();
+   if(isEigen()){originalA.replaceChildren();A.flat().forEach(v=&gt;{const e=document.createElement(&#x27;span&#x27;);e.className=&#x27;mk-entry&#x27;;e.textContent=v;originalA.append(e);});}
+   root.querySelector(&#x27;[data-eigen-original-panel]&#x27;).hidden=!isEigen();
    if(!quiz)return;
+   kind.value=quiz.kind;
    const {r,c}=quiz;
    question.textContent=quiz.kind===&#x27;det&#x27;?&#x27;Hitung determinan matriks A.&#x27;:`Hitung ${quiz.kind===&#x27;minor&#x27;?&#x27;minor M&#x27;:&#x27;kofaktor C&#x27;}(${r+1}, ${c+1}) matriks A.`;
    reveal.textContent=revealed?&#x27;Sembunyikan pembahasan&#x27;:&#x27;Tampilkan pembahasan&#x27;;
+   hint.textContent=isEigen()?&#x27;Masukkan 3 angka; pisahkan dengan titik koma. Pecahan seperti 1/2 boleh. Klik elemen A − λI untuk melihat minor dan kofaktornya.&#x27;:&#x27;Klik elemen matriks untuk melihat minor dan kofaktornya. Tanda kofaktor: (−1) pangkat (baris + kolom).&#x27;;
+   answer.placeholder=isEigen()?&#x27;Contoh: 1; 2; 3&#x27;:&#x27;Masukkan hasil perhitungan&#x27;;
+   if(isEigen()){
+     if(quiz.kind===&#x27;eigenvalue&#x27;){
+       question.textContent=&#x27;Tentukan ketiga nilai eigen A (urutan bebas).&#x27;;
+       solution.textContent=&#x27;Persamaan karakteristik det(A − λI) = &#x27;+quiz.eigenvalues.map(v=&gt;`(${v} − λ)`).join(&#x27; × &#x27;)+&#x27; = 0. Nilai eigen: &#x27;+quiz.eigenvalues.join(&#x27;; &#x27;)+&#x27;.&#x27;;
+     }else{
+       question.textContent=`Tentukan satu vektor eigen tak nol untuk λ = ${quiz.lambda}.`;
+       const av=A.map(row=&gt;row.reduce((s,a,j)=&gt;s+a*quiz.vector[j],0));
+       solution.textContent=`Selesaikan (A − ${quiz.lambda}I)v = 0. Salah satu jawaban: v = (${quiz.vector.join(&#x27;; &#x27;)})ᵀ. Av = (${av.join(&#x27;; &#x27;)})ᵀ = ${quiz.lambda}v. Setiap kelipatan tak nol dari v juga benar.`;
+     }
+     return;
+   }
    if(quiz.kind===&#x27;det&#x27;)solution.textContent=&#x27;Ekspansi baris pertama: &#x27;+A[0].map((v,j)=&gt;`(${v}) × (${cofAt(0,j)})`).join(&#x27; + &#x27;)+` = ${expected()}.`;
    else solution.textContent=`Hapus baris ${r+1} dan kolom ${c+1}: M(${r+1}, ${c+1}) = ${minorAt(r,c)}. `+(quiz.kind===&#x27;cofactor&#x27;?`C(${r+1}, ${c+1}) = (−1)^${r+c+2} × (${minorAt(r,c)}) = ${expected()}.`:&#x27;&#x27;);
  }
  root.querySelector(&#x27;[data-generate]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{
-   A=Array.from({length:4},()=&gt;Array.from({length:4},()=&gt;Math.floor(Math.random()*10)-4));
-   quiz={kind:kind.value,r:Math.floor(Math.random()*4),c:Math.floor(Math.random()*4)};revealed=false;answer.value=&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=[0,0];render(quiz.r,quiz.c,true);syncQuiz();save();
+   A=Array.from({length:3},()=&gt;Array.from({length:3},()=&gt;Math.floor(Math.random()*10)-4));
+   quiz={kind:kind.value,r:Math.floor(Math.random()*3),c:Math.floor(Math.random()*3)};
+   if(isEigen())generateEigen();
+   revealed=false;answer.value=&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=[0,0];render(quiz.r,quiz.c,true);syncQuiz();save();
  });
  root.querySelector(&#x27;[data-original-reset]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{A=initial();quiz=null;revealed=false;answer.value=&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;render(0,0,true);syncQuiz();save();});
  root.querySelector(&#x27;[data-answer-form]&#x27;).addEventListener(&#x27;submit&#x27;,event=&gt;{
    event.preventDefault();if(!quiz)return;
+   if(isEigen()){
+     const values=parseThree(answer.value);
+     if(!values){feedback.textContent=&#x27;Masukkan tepat 3 angka valid. Contoh: 1; -2; 1/2. Pembagi pecahan tidak boleh nol.&#x27;;return;}
+     let correct;
+     if(quiz.kind===&#x27;eigenvalue&#x27;)correct=values.slice().sort((a,b)=&gt;a-b).every((v,i)=&gt;Math.abs(v-quiz.eigenvalues.slice().sort((a,b)=&gt;a-b)[i])&lt;=1e-7);
+     else{
+       const scale=Math.max(...values.map(Math.abs));
+       if(scale===0){feedback.textContent=&#x27;✗ Salah. Vektor nol bukan vektor eigen.&#x27;;save();return;}
+       const v=values.map(x=&gt;x/scale);
+       correct=A.every((row,i)=&gt;Math.abs(row.reduce((s,a,j)=&gt;s+a*v[j],0)-quiz.lambda*v[i])&lt;=1e-7);
+     }
+     feedback.textContent=correct?&#x27;✓ Benar! Jawaban sesuai.&#x27;:&#x27;✗ Salah. Coba hitung kembali atau buka pembahasan.&#x27;;save();return;
+   }
    const raw=answer.value.trim().replace(/−/g,&#x27;-&#x27;).replace(&#x27;,&#x27;,&#x27;.&#x27;);
    if(!/^[+-]?\d+(?:\.\d+)?$/.test(raw)||!Number.isFinite(Number(raw))){feedback.textContent=&#x27;Masukkan jawaban berupa angka terlebih dahulu.&#x27;;return;}
    feedback.textContent=Number(raw)===expected()?&#x27;✓ Benar! Jawaban sesuai.&#x27;:&#x27;✗ Salah. Coba hitung kembali atau buka pembahasan.&#x27;;save();
  });
  reveal.addEventListener(&#x27;click&#x27;,()=&gt;{revealed=!revealed;syncQuiz();save();});
+ function generateEigen(){
+   const shuffle=a=&gt;{for(let i=a.length-1;i&gt;0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+   const e=shuffle([-6,-4,-2,0,2,4,6,8]).slice(0,3),p=shuffle([0,1,2]);
+   const base=[[(e[0]+e[1])/2,(e[0]-e[1])/2,0],[(e[0]-e[1])/2,(e[0]+e[1])/2,0],[0,0,e[2]]];
+   A=p.map(i=&gt;p.map(j=&gt;base[i][j]));
+   const index=Math.floor(Math.random()*3),v=index===2?[0,0,1]:[1,index===0?1:-1,0];
+   Object.assign(quiz,{eigenvalues:e,lambda:e[index],vector:p.map(i=&gt;v[i])});
+ }
+ function parseThree(raw){
+   const tokens=raw.trim().replace(/−/g,&#x27;-&#x27;).replace(/[()[\]]/g,&#x27;&#x27;).split(/[;,\s]+/);
+   if(tokens.length!==3)return null;
+   const number=s=&gt;/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(s)?Number(s):NaN;
+   const values=tokens.map(t=&gt;{const p=t.split(&#x27;/&#x27;);if(p.length===1)return number(p[0]);if(p.length!==2||number(p[1])===0)return NaN;return number(p[0])/number(p[1]);});
+   return values.every(Number.isFinite)?values:null;
+ }
  function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{matriks:A,soal:quiz,jawaban:answer.value,hasil:feedback.textContent,baris:selection[0]+1,kolom:selection[1]+1,minor:minorAt(...selection),kofaktor:cofAt(...selection),submatriks:{baris:subSelection[0]+1,kolom:subSelection[1]+1,minor:nestedM,kofaktor:nestedC}},privateContent:{selection,subSelection,A,quiz,revealed,answer:answer.value}}).catch(()=&gt;{});}
- function restore(state){const valid=(s,n)=&gt;Array.isArray(s)&amp;&amp;s.length===2&amp;&amp;s.every(v=&gt;Number.isInteger(v)&amp;&amp;v&gt;=0&amp;&amp;v&lt;n);const p=state?.privateContent||{},s=p.selection,t=p.subSelection;if(Array.isArray(p.A)&amp;&amp;p.A.length===4&amp;&amp;p.A.every(row=&gt;Array.isArray(row)&amp;&amp;row.length===4&amp;&amp;row.every(v=&gt;Number.isInteger(v)&amp;&amp;Math.abs(v)&lt;100)))A=p.A;else A=initial();quiz=p.quiz&amp;&amp;[&#x27;det&#x27;,&#x27;minor&#x27;,&#x27;cofactor&#x27;].includes(p.quiz.kind)&amp;&amp;valid([p.quiz.r,p.quiz.c],4)?p.quiz:null;revealed=p.revealed===true;answer.value=typeof p.answer===&#x27;string&#x27;?p.answer:&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=valid(t,3)?t:[0,0];if(valid(s,4))render(s[0],s[1]);else render(0,0);syncQuiz();}
+ function restore(state){
+   const valid=(s,n)=&gt;Array.isArray(s)&amp;&amp;s.length===2&amp;&amp;s.every(v=&gt;Number.isInteger(v)&amp;&amp;v&gt;=0&amp;&amp;v&lt;n);
+   const p=state?.privateContent||{},s=p.selection,t=p.subSelection;
+   const compatible=Array.isArray(p.A)&amp;&amp;p.A.length===3&amp;&amp;p.A.every(row=&gt;Array.isArray(row)&amp;&amp;row.length===3&amp;&amp;row.every(v=&gt;Number.isInteger(v)&amp;&amp;Math.abs(v)&lt;100));
+   A=compatible?p.A:initial();quiz=compatible&amp;&amp;p.quiz&amp;&amp;[&#x27;det&#x27;,&#x27;minor&#x27;,&#x27;cofactor&#x27;,&#x27;eigenvalue&#x27;,&#x27;eigenvector&#x27;].includes(p.quiz.kind)&amp;&amp;valid([p.quiz.r,p.quiz.c],3)?p.quiz:null;
+   if(isEigen()&amp;&amp;(!Array.isArray(quiz.eigenvalues)||quiz.eigenvalues.length!==3||!Array.isArray(quiz.vector)||quiz.vector.length!==3))quiz=null;
+   revealed=compatible&amp;&amp;p.revealed===true;answer.value=compatible&amp;&amp;typeof p.answer===&#x27;string&#x27;?p.answer:&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=valid(t,2)?t:[0,0];if(valid(s,3))render(s[0],s[1]);else render(0,0);syncQuiz();
+ }
  restore(window.openai?.widgetState);
  window.addEventListener(&#x27;openai:set_globals&#x27;,event=&gt;{if(event.detail?.globals?.widgetState)restore(event.detail.globals.widgetState);});
 })();
