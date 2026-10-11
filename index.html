@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Latihan Matriks 2x2, 3x3 dan 4x4</title>
+<title>Latihan Matriks, Invers, Eigen dan SPL</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Latihan Matriks 2x2, 3x3 dan 4x4" data-srcdoc="&lt;!doctype html&gt;
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Latihan Matriks, Invers, Eigen dan SPL" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Latihan Matriks 2x2, 3x3 dan 4x4&lt;/title&gt;
+&lt;title&gt;Latihan Matriks, Invers, Eigen dan SPL&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(
@@ -339,7 +339,18 @@ code:not(pre code) {
   background: var(--card);
 }
 
-#widget &gt; :not(.card, .progress) {
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
@@ -594,6 +605,194 @@ a.btn {
 .nav-pills .nav-link.active {
   color: var(--foreground);
   background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover) !important;
 }
 
 .btn:disabled,
@@ -930,9 +1129,21 @@ textarea.form-control {
   outline-offset: 2px;
 }
 
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
 @media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
   .btn,
   .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
   .form-control,
   .form-select {
     min-width: 44px;
@@ -1330,20 +1541,46 @@ html&gt;body{padding:0}&lt;/style&gt;
   &lt;h3&gt;Latihan matriks&lt;/h3&gt;
   &lt;div class=&quot;viz-controls&quot;&gt;
     &lt;label class=&quot;form-label&quot;&gt;Ukuran&lt;select class=&quot;form-select&quot; data-size&gt;&lt;option value=&quot;3&quot;&gt;3 × 3&lt;/option&gt;&lt;option value=&quot;2&quot;&gt;2 × 2&lt;/option&gt;&lt;option value=&quot;4&quot;&gt;4 × 4&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
-    &lt;label class=&quot;form-label&quot;&gt;Jenis soal&lt;select class=&quot;form-select&quot; data-kind&gt;&lt;option value=&quot;det&quot;&gt;Determinan A&lt;/option&gt;&lt;option value=&quot;minor&quot;&gt;Minor A&lt;/option&gt;&lt;option value=&quot;cofactor&quot;&gt;Kofaktor A&lt;/option&gt;&lt;option value=&quot;eigenvalue&quot;&gt;Nilai eigen A&lt;/option&gt;&lt;option value=&quot;eigenvector&quot;&gt;Vektor eigen A&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+    &lt;label class=&quot;form-label&quot;&gt;Jenis soal&lt;select class=&quot;form-select&quot; data-kind&gt;&lt;option value=&quot;det&quot;&gt;Determinan A&lt;/option&gt;&lt;option value=&quot;minor&quot;&gt;Minor A&lt;/option&gt;&lt;option value=&quot;cofactor&quot;&gt;Kofaktor A&lt;/option&gt;&lt;option value=&quot;inverse&quot;&gt;Invers A · metode kofaktor&lt;/option&gt;&lt;option value=&quot;eigenvalue&quot;&gt;Nilai eigen A&lt;/option&gt;&lt;option value=&quot;eigenvector&quot;&gt;Vektor eigen A&lt;/option&gt;&lt;option value=&quot;spl&quot;&gt;Sistem persamaan linier (SPL)&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-generate&gt;Buat soal baru&lt;/button&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-original-reset&gt;Matriks awal&lt;/button&gt;
   &lt;/div&gt;
   &lt;div data-quiz hidden&gt;
     &lt;h3 data-question&gt;&lt;/h3&gt;
+    &lt;div class=&quot;mk-equations tabular-nums&quot; data-equations hidden aria-label=&quot;Sistem persamaan linier&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;text-small&quot; data-answer-hint&gt;&lt;/div&gt;
     &lt;form class=&quot;viz-controls&quot; data-answer-form&gt;
       &lt;label class=&quot;form-label&quot;&gt;Jawaban&lt;input class=&quot;form-control&quot; type=&quot;text&quot; autocomplete=&quot;off&quot; data-answer placeholder=&quot;Masukkan hasil perhitungan&quot;&gt;&lt;/label&gt;
+      &lt;div class=&quot;mk-inverse-answer&quot; data-inverse-answer hidden&gt;
+        &lt;div class=&quot;mk-label&quot;&gt;Jawaban A⁻¹&lt;/div&gt;
+        &lt;div class=&quot;mk-inverse-inputs&quot; data-inverse-inputs&gt;&lt;/div&gt;
+        &lt;label class=&quot;form-check mk-nested-result&quot;&gt;&lt;input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; data-inverse-singular&gt;&lt;span class=&quot;form-check-label&quot;&gt;Tidak memiliki invers (determinan nol)&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
       &lt;button class=&quot;btn btn-primary&quot; type=&quot;submit&quot;&gt;Cek jawaban&lt;/button&gt;
       &lt;button class=&quot;btn&quot; type=&quot;button&quot; data-reveal&gt;Tampilkan pembahasan&lt;/button&gt;
     &lt;/form&gt;
     &lt;div role=&quot;status&quot; aria-live=&quot;polite&quot; data-feedback&gt;&lt;/div&gt;
     &lt;div class=&quot;mk-nested-result tabular-nums&quot; data-solution hidden&gt;&lt;/div&gt;
+    &lt;div class=&quot;mk-nested-result&quot; data-inverse-solution hidden&gt;
+      &lt;div class=&quot;mk-label tabular-nums&quot; data-inverse-det&gt;&lt;/div&gt;
+      &lt;div class=&quot;mk-layout&quot;&gt;
+        &lt;section&gt;&lt;div class=&quot;mk-label&quot;&gt;1. Matriks kofaktor C&lt;/div&gt;&lt;div class=&quot;mk-matrix tabular-nums&quot; data-inverse-cof&gt;&lt;/div&gt;&lt;/section&gt;
+        &lt;section&gt;&lt;div class=&quot;mk-label&quot;&gt;2. Adjoin adj(A) = Cᵀ&lt;/div&gt;&lt;div class=&quot;mk-matrix tabular-nums&quot; data-inverse-adj&gt;&lt;/div&gt;&lt;/section&gt;
+        &lt;section data-inverse-final-panel&gt;&lt;div class=&quot;mk-label&quot;&gt;3. A⁻¹ = adj(A) / det(A)&lt;/div&gt;&lt;div class=&quot;mk-matrix tabular-nums&quot; data-inverse-final&gt;&lt;/div&gt;&lt;/section&gt;
+      &lt;/div&gt;
+      &lt;div data-inverse-conclusion&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;mk-nested-result&quot; data-spl-walkthrough hidden&gt;
+      &lt;div class=&quot;mk-label&quot;&gt;Eliminasi Gauss–Jordan · [A | b]&lt;/div&gt;
+      &lt;div class=&quot;mk-step-label&quot; data-spl-step-label aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;mk-matrix mk-augmented tabular-nums&quot; data-spl-augmented role=&quot;img&quot; aria-label=&quot;Matriks diperbesar pada langkah eliminasi&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;viz-controls&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-spl-prev&gt;Langkah sebelumnya&lt;/button&gt;
+        &lt;span class=&quot;text-small&quot; data-spl-progress&gt;&lt;/span&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-spl-next&gt;Langkah berikutnya&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;mk-nested-result tabular-nums&quot; data-spl-final&gt;&lt;/div&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
   &lt;div class=&quot;mk-layout&quot;&gt;
     &lt;section data-eigen-original-panel hidden aria-label=&quot;Matriks soal A&quot;&gt;
@@ -1353,6 +1590,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;section aria-label=&quot;Matriks asal&quot;&gt;
       &lt;div class=&quot;mk-label&quot; data-original-label&gt;Matriks A · pilih elemen&lt;/div&gt;
       &lt;div class=&quot;mk-matrix mk-original&quot; data-original&gt;&lt;/div&gt;
+    &lt;/section&gt;
+    &lt;section data-spl-rhs-panel hidden aria-label=&quot;Ruas kanan b&quot;&gt;
+      &lt;div class=&quot;mk-label&quot;&gt;Ruas kanan b&lt;/div&gt;
+      &lt;div class=&quot;mk-matrix mk-tiny tabular-nums&quot; data-spl-rhs&gt;&lt;/div&gt;
     &lt;/section&gt;
     &lt;section aria-label=&quot;Submatriks yang tersisa&quot;&gt;
       &lt;div class=&quot;mk-label&quot; data-minor-label&gt;Submatriks minor (1, 1)&lt;/div&gt;
@@ -1379,6 +1620,14 @@ html&gt;body{padding:0}&lt;/style&gt;
 #minor-kofaktor-interaktif .mk-small {grid-template-columns:repeat(2,72px);}
 #minor-kofaktor-interaktif .mk-tiny {grid-template-columns:repeat(1,72px);}
 #minor-kofaktor-interaktif .mk-nested-result {margin-top:12px;}
+#minor-kofaktor-interaktif .mk-equations {margin:12px 0;overflow-wrap:anywhere;}
+#minor-kofaktor-interaktif .mk-step-label {margin-bottom:12px;overflow-wrap:anywhere;}
+#minor-kofaktor-interaktif .mk-augmented {width:min(420px,100%);margin-bottom:12px;}
+#minor-kofaktor-interaktif .mk-aug-entry {display:grid;place-items:center;min-height:44px;overflow-wrap:anywhere;min-width:0;}
+#minor-kofaktor-interaktif .mk-aug-rhs {border-left:1px solid var(--border);}
+#minor-kofaktor-interaktif .mk-aug-changed {background:color-mix(in srgb,var(--viz-series-1) 18%,transparent);}
+#minor-kofaktor-interaktif .mk-inverse-answer {width:100%;}
+#minor-kofaktor-interaktif .mk-inverse-inputs {display:grid;gap:8px;width:min(520px,100%);}
 #minor-kofaktor-interaktif .mk-cell {position:relative;display:grid;min-height:44px;transition:background-color 350ms;}
 #minor-kofaktor-interaktif .mk-cell.kept {background:color-mix(in srgb,var(--viz-series-1) 20%,transparent);}
 #minor-kofaktor-interaktif .mk-cell::after {content:&quot;&quot;;position:absolute;left:4px;right:4px;top:50%;height:2px;background:var(--viz-series-2);transform:scaleX(0) rotate(-20deg);transition:transform 350ms;pointer-events:none;}
@@ -1404,6 +1653,10 @@ html&gt;body{padding:0}&lt;/style&gt;
  const kind=root.querySelector(&#x27;[data-kind]&#x27;),quizBox=root.querySelector(&#x27;[data-quiz]&#x27;),question=root.querySelector(&#x27;[data-question]&#x27;),answer=root.querySelector(&#x27;[data-answer]&#x27;),feedback=root.querySelector(&#x27;[data-feedback]&#x27;),solution=root.querySelector(&#x27;[data-solution]&#x27;),reveal=root.querySelector(&#x27;[data-reveal]&#x27;);
  const hint=root.querySelector(&#x27;[data-answer-hint]&#x27;);
  const isEigen=()=&gt;quiz&amp;&amp;[&#x27;eigenvalue&#x27;,&#x27;eigenvector&#x27;].includes(quiz.kind);
+ const isSpl=()=&gt;quiz?.kind===&#x27;spl&#x27;;
+ const isInverse=()=&gt;quiz?.kind===&#x27;inverse&#x27;;
+ const inverseGrid=root.querySelector(&#x27;[data-inverse-inputs]&#x27;),singularCheck=root.querySelector(&#x27;[data-inverse-singular]&#x27;);
+ let splSteps=[],splStep=0;
  const workMatrix=()=&gt;!isEigen()?A:A.map((row,i)=&gt;row.map((v,j)=&gt;i!==j?v:quiz.kind===&#x27;eigenvalue&#x27;?`(${v} − λ)`:v-quiz.lambda));
  const symbolic=()=&gt;quiz?.kind===&#x27;eigenvalue&#x27;;
  const det2=m=&gt;m[0][0]*m[1][1]-m[0][1]*m[1][0];
@@ -1436,7 +1689,7 @@ html&gt;body{padding:0}&lt;/style&gt;
    const W=workMatrix();
    original.style.width=`min(${size*78+14}px, 100%)`;
    original.style.gridTemplateColumns=`repeat(${size},minmax(0,1fr))`;
-   if(size===2){original.replaceChildren();W.flat().forEach(v=&gt;{const entry=document.createElement(&#x27;span&#x27;);entry.className=&#x27;mk-entry&#x27;;entry.textContent=v;original.append(entry);});return;}
+   if(size===2||isSpl()){original.replaceChildren();W.flat().forEach(v=&gt;{const entry=document.createElement(&#x27;span&#x27;);entry.className=&#x27;mk-entry&#x27;;entry.textContent=v;original.append(entry);});return;}
    if(cells.length!==size*size||original.children.length!==size*size)buildCells();
    cells.forEach(({wrap,button,i,j})=&gt;{
      button.textContent=W[i][j];button.setAttribute(&#x27;aria-label&#x27;,`Pilih elemen ${W[i][j]}, baris ${i+1}, kolom ${j+1}`);
@@ -1479,10 +1732,13 @@ html&gt;body{padding:0}&lt;/style&gt;
  }
  function minorAt(r,c){const m=A.filter((_,i)=&gt;i!==r).map(row=&gt;row.filter((_,j)=&gt;j!==c));return det(m);}
  function cofAt(r,c){return ((r+c)%2?-1:1)*minorAt(r,c)||0;}
+ function determinantA(){return A[0].reduce((sum,v,j)=&gt;sum+v*cofAt(0,j),0);}
  function expected(){return quiz.kind===&#x27;det&#x27;?A[0].reduce((sum,v,j)=&gt;sum+v*cofAt(0,j),0):quiz.kind===&#x27;minor&#x27;?minorAt(quiz.r,quiz.c):cofAt(quiz.r,quiz.c);}
  function syncQuiz(){
-   quizBox.hidden=!quiz;result.hidden=size===2;nestedResult.hidden=size===2;solution.hidden=!quiz||!revealed;
-   minor.parentElement.hidden=size===2;nested.parentElement.hidden=size===2;root.querySelector(&#x27;.mk-legend&#x27;).hidden=size===2;
+   quizBox.hidden=!quiz;result.hidden=size===2||isSpl();nestedResult.hidden=size===2||isSpl();solution.hidden=!quiz||!revealed||isSpl()||isInverse();
+   answer.parentElement.hidden=isInverse();root.querySelector(&#x27;[data-inverse-answer]&#x27;).hidden=!isInverse();root.querySelector(&#x27;[data-inverse-solution]&#x27;).hidden=!isInverse()||!revealed;
+   minor.parentElement.hidden=size===2||isSpl();nested.parentElement.hidden=size===2||isSpl();root.querySelector(&#x27;.mk-legend&#x27;).hidden=size===2||isSpl();
+   root.querySelector(&#x27;[data-equations]&#x27;).hidden=!isSpl();root.querySelector(&#x27;[data-spl-rhs-panel]&#x27;).hidden=!isSpl();root.querySelector(&#x27;[data-spl-walkthrough]&#x27;).hidden=!isSpl()||!revealed;
    sizeControl.value=String(size);for(const opt of kind.options){opt.hidden=opt.disabled=size===2&amp;&amp;[&#x27;minor&#x27;,&#x27;cofactor&#x27;].includes(opt.value);}
    root.querySelector(&#x27;[data-original-label]&#x27;).textContent=isEigen()?quiz.kind===&#x27;eigenvalue&#x27;?&#x27;A − λI · pilih elemen&#x27;:`A − (${quiz.lambda})I · pilih elemen`:&#x27;Matriks A · pilih elemen&#x27;;
    if(size===2)root.querySelector(&#x27;[data-original-label]&#x27;).textContent=isEigen()?(symbolic()?&#x27;A − λI&#x27;:`A − (${quiz.lambda})I`):&#x27;Matriks A&#x27;;
@@ -1491,6 +1747,23 @@ html&gt;body{padding:0}&lt;/style&gt;
    root.querySelector(&#x27;[data-eigen-original-panel]&#x27;).hidden=!isEigen();
    if(!quiz)return;
    kind.value=quiz.kind;
+   if(isInverse()){
+     question.textContent=`Cari invers matriks A (${size} × ${size}) dengan metode kofaktor.`;
+     hint.textContent=&#x27;Isi setiap elemen A⁻¹ dengan angka atau pecahan, misalnya -2/3. Jika det(A) = 0, pilih “Tidak memiliki invers”.&#x27;;
+     reveal.textContent=revealed?&#x27;Sembunyikan pembahasan&#x27;:&#x27;Tampilkan pembahasan&#x27;;
+     prepareInverseInputs();if(revealed)renderInverseSolution();return;
+   }
+   if(isSpl()){
+     root.querySelector(&#x27;[data-original-label]&#x27;).textContent=&#x27;Matriks koefisien A&#x27;;
+     question.textContent=`Selesaikan SPL dengan ${size} variabel: Ax = b.`;
+     hint.textContent=`Masukkan ${size} nilai berurutan: ${Array.from({length:size},(_,i)=&gt;&#x27;x&#x27;+subscript(i+1)).join(&#x27;, &#x27;)}. Pisahkan dengan titik koma; pecahan seperti 1/2 boleh. Soal memiliki satu solusi.`;
+     answer.placeholder=&#x27;Contoh: &#x27;+Array.from({length:size},(_,i)=&gt;i+1).join(&#x27;; &#x27;);
+     reveal.textContent=revealed?&#x27;Sembunyikan pembahasan&#x27;:&#x27;Tampilkan pembahasan&#x27;;
+     const equations=root.querySelector(&#x27;[data-equations]&#x27;);equations.replaceChildren();
+     A.forEach((row,i)=&gt;{const line=document.createElement(&#x27;div&#x27;);line.textContent=equation(row,quiz.b[i]);equations.append(line);});
+     const rhs=root.querySelector(&#x27;[data-spl-rhs]&#x27;);rhs.replaceChildren();quiz.b.forEach(v=&gt;{const e=document.createElement(&#x27;span&#x27;);e.className=&#x27;mk-entry&#x27;;e.textContent=v;rhs.append(e);});
+     if(revealed)renderSplStep();return;
+   }
    const {r,c}=quiz;
    question.textContent=quiz.kind===&#x27;det&#x27;?&#x27;Hitung determinan matriks A.&#x27;:`Hitung ${quiz.kind===&#x27;minor&#x27;?&#x27;minor M&#x27;:&#x27;kofaktor C&#x27;}(${r+1}, ${c+1}) matriks A.`;
    reveal.textContent=revealed?&#x27;Sembunyikan pembahasan&#x27;:&#x27;Tampilkan pembahasan&#x27;;
@@ -1516,6 +1789,13 @@ html&gt;body{padding:0}&lt;/style&gt;
    A=Array.from({length:size},()=&gt;Array.from({length:size},()=&gt;Math.floor(Math.random()*10)-4));
    quiz={kind:kind.value,r:Math.floor(Math.random()*size),c:Math.floor(Math.random()*size)};
    if(isEigen())generateEigen();
+   if(isSpl())generateSpl();
+   if(isInverse()){
+     for(let attempt=0;determinantA()===0&amp;&amp;attempt&lt;30;attempt++)A=Array.from({length:size},()=&gt;Array.from({length:size},()=&gt;Math.floor(Math.random()*9)-4));
+     if(determinantA()===0)A=Array.from({length:size},(_,i)=&gt;Array.from({length:size},(_,j)=&gt;i===j?2:1));
+     if(Math.random()&lt;0.2)A[size-1]=A[0].slice();
+   }
+   inverseGrid.replaceChildren();singularCheck.checked=false;
    revealed=false;answer.value=&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=[0,0];render(quiz.r,quiz.c,true);syncQuiz();save();
  }
  root.querySelector(&#x27;[data-generate]&#x27;).addEventListener(&#x27;click&#x27;,generate);
@@ -1523,6 +1803,20 @@ html&gt;body{padding:0}&lt;/style&gt;
  root.querySelector(&#x27;[data-original-reset]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{A=initial();quiz=null;revealed=false;answer.value=&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;render(0,0,true);syncQuiz();save();});
  root.querySelector(&#x27;[data-answer-form]&#x27;).addEventListener(&#x27;submit&#x27;,event=&gt;{
    event.preventDefault();if(!quiz)return;
+   if(isInverse()){
+     const d=determinantA();
+     if(singularCheck.checked){feedback.textContent=d===0?&#x27;✓ Benar! Determinan nol, sehingga invers tidak ada.&#x27;:&#x27;✗ Salah. Determinan tidak nol; matriks memiliki invers.&#x27;;save();return;}
+     const values=Array.from(inverseGrid.children).map(input=&gt;parseScalar(input.value));
+     if(values.length!==size*size||!values.every(Number.isFinite)){feedback.textContent=&#x27;Isi semua elemen invers dengan angka atau pecahan valid. Jika invers tidak ada, pilih kotak yang tersedia.&#x27;;return;}
+     const correct=d!==0&amp;&amp;A.every((row,i)=&gt;Array.from({length:size},(_,j)=&gt;j).every(j=&gt;Math.abs(row.reduce((sum,a,k)=&gt;sum+a*values[k*size+j],0)-(i===j?1:0))&lt;=1e-7));
+     feedback.textContent=correct?&#x27;✓ Benar! A × A⁻¹ = I.&#x27;:&#x27;✗ Salah. Jawaban belum merupakan invers matriks A.&#x27;;save();return;
+   }
+   if(isSpl()){
+     const values=parseVector(answer.value);
+     if(!values){feedback.textContent=`Masukkan tepat ${size} angka valid, dipisahkan titik koma. Pecahan boleh; pembagi tidak boleh nol.`;return;}
+     const correct=A.every((row,i)=&gt;Math.abs(row.reduce((sum,a,j)=&gt;sum+a*values[j],0)-quiz.b[i])&lt;=1e-7);
+     feedback.textContent=correct?&#x27;✓ Benar! Semua persamaan terpenuhi.&#x27;:&#x27;✗ Salah. Nilai yang dimasukkan belum memenuhi semua persamaan.&#x27;;save();return;
+   }
    if(isEigen()){
      const values=parseVector(answer.value);
      if(!values){feedback.textContent=`Masukkan tepat ${size} angka valid, dipisahkan titik koma. Pembagi pecahan tidak boleh nol.`;return;}
@@ -1541,6 +1835,75 @@ html&gt;body{padding:0}&lt;/style&gt;
    feedback.textContent=Number(raw)===expected()?&#x27;✓ Benar! Jawaban sesuai.&#x27;:&#x27;✗ Salah. Coba hitung kembali atau buka pembahasan.&#x27;;save();
  });
  reveal.addEventListener(&#x27;click&#x27;,()=&gt;{revealed=!revealed;syncQuiz();save();});
+ singularCheck.addEventListener(&#x27;change&#x27;,()=&gt;{Array.from(inverseGrid.children).forEach(input=&gt;input.disabled=singularCheck.checked);feedback.textContent=&#x27;&#x27;;save();});
+ function parseScalar(raw){
+   const token=String(raw).trim().replace(/−/g,&#x27;-&#x27;).replace(&#x27;,&#x27;,&#x27;.&#x27;);
+   const number=s=&gt;/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(s)?Number(s):NaN;
+   const parts=token.split(&#x27;/&#x27;);if(parts.length===1)return number(parts[0]);if(parts.length!==2||number(parts[1])===0)return NaN;return number(parts[0])/number(parts[1]);
+ }
+ function prepareInverseInputs(){
+   inverseGrid.style.gridTemplateColumns=`repeat(${size},minmax(0,1fr))`;
+   if(inverseGrid.children.length!==size*size){inverseGrid.replaceChildren();for(let i=0;i&lt;size;i++)for(let j=0;j&lt;size;j++){
+     const input=document.createElement(&#x27;input&#x27;);input.type=&#x27;text&#x27;;input.className=&#x27;form-control&#x27;;input.autocomplete=&#x27;off&#x27;;input.placeholder=`(${i+1},${j+1})`;input.setAttribute(&#x27;aria-label&#x27;,`Invers baris ${i+1}, kolom ${j+1}`);input.addEventListener(&#x27;input&#x27;,save);inverseGrid.append(input);
+   }}
+   Array.from(inverseGrid.children).forEach(input=&gt;input.disabled=singularCheck.checked);
+ }
+ function renderInverseSolution(){
+   const d=determinantA(),C=A.map((row,i)=&gt;row.map((_,j)=&gt;cofAt(i,j))),adj=C.map((row,i)=&gt;row.map((_,j)=&gt;C[j][i]));
+   root.querySelector(&#x27;[data-inverse-det]&#x27;).textContent=&#x27;det(A) = &#x27;+A[0].map((v,j)=&gt;`(${v}) × (${C[0][j]})`).join(&#x27; + &#x27;)+` = ${d}`;
+   const draw=(selector,matrix,clickable=false)=&gt;{
+     const grid=root.querySelector(selector);grid.replaceChildren();grid.style.width=`min(${size*78+14}px,100%)`;grid.style.gridTemplateColumns=`repeat(${size},minmax(0,1fr))`;
+     matrix.forEach((row,i)=&gt;row.forEach((v,j)=&gt;{const e=document.createElement(clickable?&#x27;button&#x27;:&#x27;span&#x27;);e.textContent=v;e.className=clickable?&#x27;btn btn-ghost tabular-nums&#x27;:&#x27;mk-aug-entry&#x27;;if(clickable){e.type=&#x27;button&#x27;;e.setAttribute(&#x27;aria-label&#x27;,`Kofaktor C${i+1}${j+1} = ${v}`);e.addEventListener(&#x27;click&#x27;,()=&gt;{render(i,j,true);save();});}grid.append(e);}));
+   };
+   draw(&#x27;[data-inverse-cof]&#x27;,C,size&gt;=3);draw(&#x27;[data-inverse-adj]&#x27;,adj);
+   root.querySelector(&#x27;[data-inverse-final-panel]&#x27;).hidden=d===0;
+   if(d!==0)draw(&#x27;[data-inverse-final]&#x27;,adj.map(row=&gt;row.map(v=&gt;fText(fraction(v,d)))));
+   root.querySelector(&#x27;[data-inverse-conclusion]&#x27;).textContent=d===0?&#x27;Determinan nol. Matriks singular dan tidak memiliki invers.&#x27;:size&gt;=3?&#x27;Klik elemen matriks kofaktor untuk melihat minor penyusunnya.&#x27;:&#x27;Setiap elemen adjoin dibagi determinan untuk memperoleh invers.&#x27;;
+ }
+ root.querySelector(&#x27;[data-spl-prev]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{if(!isSpl()||!splSteps.length)return;splStep=Math.max(0,splStep-1);renderSplStep();save();});
+ root.querySelector(&#x27;[data-spl-next]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{if(!isSpl()||!splSteps.length)return;splStep=Math.min(splSteps.length-1,splStep+1);renderSplStep();save();});
+ function subscript(n){return String(n).replace(/\d/g,d=&gt;&#x27;₀₁₂₃₄₅₆₇₈₉&#x27;[Number(d)]);}
+ function equation(row,b){let text=&#x27;&#x27;;row.forEach((v,j)=&gt;{if(!v)return;const term=(Math.abs(v)===1?&#x27;&#x27;:Math.abs(v))+&#x27;x&#x27;+subscript(j+1);text+=(text?(v&lt;0?&#x27; − &#x27;:&#x27; + &#x27;):(v&lt;0?&#x27;−&#x27;:&#x27;&#x27;))+term;});return (text||&#x27;0&#x27;)+&#x27; = &#x27;+b;}
+ function generateSpl(){
+   const random=()=&gt;Math.floor(Math.random()*7)-3;
+   A=Array.from({length:size},()=&gt;Array.from({length:size},random));
+   A.forEach((row,i)=&gt;{row[i]=row.reduce((sum,v,j)=&gt;sum+(i===j?0:Math.abs(v)),0)+1+Math.floor(Math.random()*3);});
+   const x=Array.from({length:size},()=&gt;Math.floor(Math.random()*11)-5);
+   quiz.b=A.map(row=&gt;row.reduce((sum,v,j)=&gt;sum+v*x[j],0));
+   splSteps=gaussSteps(A,quiz.b);splStep=0;
+ }
+ function fraction(n,d=1){
+   if(d===0)throw Error(&#x27;Pembagi nol&#x27;);if(d&lt;0){n=-n;d=-d;}
+   let a=Math.abs(n),b=d;while(b){[a,b]=[b,a%b];}const g=a||1;return [n/g,d/g];
+ }
+ const fSub=(a,b)=&gt;fraction(a[0]*b[1]-b[0]*a[1],a[1]*b[1]);
+ const fMul=(a,b)=&gt;fraction(a[0]*b[0],a[1]*b[1]);
+ const fDiv=(a,b)=&gt;fraction(a[0]*b[1],a[1]*b[0]);
+ const fText=a=&gt;a[1]===1?String(a[0]):a[0]+&#x27;/&#x27;+a[1];
+ function gaussSteps(matrix,b){
+   const m=matrix.map((row,i)=&gt;[...row,b[i]].map(v=&gt;fraction(v))),steps=[];
+   const record=(label,changed=-1)=&gt;steps.push({label,changed,m:m.map(row=&gt;row.map(v=&gt;v.slice()))});
+   record(&#x27;Matriks diperbesar awal.&#x27;);
+   for(let k=0;k&lt;matrix.length;k++){
+     let p=k;while(p&lt;matrix.length&amp;&amp;m[p][k][0]===0)p++;
+     if(p===matrix.length)throw Error(&#x27;Sistem tidak memiliki solusi tunggal&#x27;);
+     if(p!==k){[m[k],m[p]]=[m[p],m[k]];record(`R${subscript(k+1)} ↔ R${subscript(p+1)}`,k);}
+     const pivot=m[k][k].slice();
+     if(pivot[0]!==pivot[1]){m[k]=m[k].map(v=&gt;fDiv(v,pivot));record(`R${subscript(k+1)} ← R${subscript(k+1)} ÷ (${fText(pivot)})`,k);}
+     for(let i=0;i&lt;matrix.length;i++)if(i!==k&amp;&amp;m[i][k][0]!==0){const factor=m[i][k].slice();m[i]=m[i].map((v,j)=&gt;fSub(v,fMul(factor,m[k][j])));record(`R${subscript(i+1)} ← R${subscript(i+1)} − (${fText(factor)})R${subscript(k+1)}`,i);}
+   }
+   return steps;
+ }
+ function renderSplStep(){
+   if(!splSteps.length)return;splStep=Math.max(0,Math.min(splStep,splSteps.length-1));const step=splSteps[splStep];
+   root.querySelector(&#x27;[data-spl-step-label]&#x27;).textContent=step.label;
+   root.querySelector(&#x27;[data-spl-progress]&#x27;).textContent=`${splStep+1} / ${splSteps.length}`;
+   root.querySelector(&#x27;[data-spl-prev]&#x27;).disabled=splStep===0;root.querySelector(&#x27;[data-spl-next]&#x27;).disabled=splStep===splSteps.length-1;
+   const grid=root.querySelector(&#x27;[data-spl-augmented]&#x27;);grid.replaceChildren();grid.style.gridTemplateColumns=`repeat(${size+1},minmax(0,1fr))`;
+   grid.setAttribute(&#x27;aria-label&#x27;,step.label+&#x27; &#x27;+step.m.map(row=&gt;row.map(fText).join(&#x27;, &#x27;)).join(&#x27;; &#x27;));
+   step.m.forEach((row,i)=&gt;row.forEach((v,j)=&gt;{const entry=document.createElement(&#x27;span&#x27;);entry.className=&#x27;mk-aug-entry&#x27;+(j===size?&#x27; mk-aug-rhs&#x27;:&#x27;&#x27;)+(i===step.changed?&#x27; mk-aug-changed&#x27;:&#x27;&#x27;);entry.textContent=fText(v);grid.append(entry);}));
+   const final=root.querySelector(&#x27;[data-spl-final]&#x27;);final.textContent=splStep===splSteps.length-1?&#x27;Solusi: &#x27;+step.m.map((row,i)=&gt;`x${subscript(i+1)} = ${fText(row[size])}`).join(&#x27;; &#x27;):&#x27;&#x27;;
+ }
  function generateEigen(){
    const shuffle=a=&gt;{for(let i=a.length-1;i&gt;0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
    const e=shuffle([-6,-4,-2,0,2,4,6,8]).slice(0,size),p=shuffle(Array.from({length:size},(_,i)=&gt;i));
@@ -1557,15 +1920,22 @@ html&gt;body{padding:0}&lt;/style&gt;
    const values=tokens.map(t=&gt;{const p=t.split(&#x27;/&#x27;);if(p.length===1)return number(p[0]);if(p.length!==2||number(p[1])===0)return NaN;return number(p[0])/number(p[1]);});
    return values.every(Number.isFinite)?values:null;
  }
- function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{matriks:A,soal:quiz,jawaban:answer.value,hasil:feedback.textContent,baris:selection[0]+1,kolom:selection[1]+1,minor:minorAt(...selection),kofaktor:cofAt(...selection),submatriks:{baris:subSelection[0]+1,kolom:subSelection[1]+1,minor:nestedM,kofaktor:nestedC}},privateContent:{selection,subSelection,A,quiz,revealed,answer:answer.value}}).catch(()=&gt;{});}
+ function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{matriks:A,soal:quiz,jawaban:answer.value,hasil:feedback.textContent,baris:selection[0]+1,kolom:selection[1]+1,minor:minorAt(...selection),kofaktor:cofAt(...selection),submatriks:{baris:subSelection[0]+1,kolom:subSelection[1]+1,minor:nestedM,kofaktor:nestedC}},privateContent:{selection,subSelection,A,quiz,revealed,answer:answer.value,splStep,inverseAnswers:Array.from(inverseGrid.children).map(input=&gt;input.value),inverseSingular:singularCheck.checked}}).catch(()=&gt;{});}
  function restore(state){
    const valid=(s,n)=&gt;Array.isArray(s)&amp;&amp;s.length===2&amp;&amp;s.every(v=&gt;Number.isInteger(v)&amp;&amp;v&gt;=0&amp;&amp;v&lt;n);
    const p=state?.privateContent||{},s=p.selection,t=p.subSelection;
    size=Array.isArray(p.A)&amp;&amp;[2,3,4].includes(p.A.length)?p.A.length:3;
    const compatible=Array.isArray(p.A)&amp;&amp;p.A.length===size&amp;&amp;p.A.every(row=&gt;Array.isArray(row)&amp;&amp;row.length===size&amp;&amp;row.every(v=&gt;Number.isInteger(v)&amp;&amp;Math.abs(v)&lt;100));
-   A=compatible?p.A:initial();quiz=compatible&amp;&amp;p.quiz&amp;&amp;[&#x27;det&#x27;,&#x27;minor&#x27;,&#x27;cofactor&#x27;,&#x27;eigenvalue&#x27;,&#x27;eigenvector&#x27;].includes(p.quiz.kind)&amp;&amp;valid([p.quiz.r,p.quiz.c],size)?p.quiz:null;
+   A=compatible?p.A:initial();quiz=compatible&amp;&amp;p.quiz&amp;&amp;[&#x27;det&#x27;,&#x27;minor&#x27;,&#x27;cofactor&#x27;,&#x27;eigenvalue&#x27;,&#x27;eigenvector&#x27;,&#x27;spl&#x27;,&#x27;inverse&#x27;].includes(p.quiz.kind)&amp;&amp;valid([p.quiz.r,p.quiz.c],size)?p.quiz:null;
    if(size===2&amp;&amp;quiz&amp;&amp;[&#x27;minor&#x27;,&#x27;cofactor&#x27;].includes(quiz.kind))quiz=null;
    if(isEigen()&amp;&amp;(!Array.isArray(quiz.eigenvalues)||quiz.eigenvalues.length!==size||!Array.isArray(quiz.vector)||quiz.vector.length!==size))quiz=null;
+   splSteps=[];splStep=0;
+   if(isSpl()){
+     if(!Array.isArray(quiz.b)||quiz.b.length!==size||!quiz.b.every(Number.isSafeInteger))quiz=null;
+     else try{splSteps=gaussSteps(A,quiz.b);splStep=Number.isInteger(p.splStep)?Math.max(0,Math.min(p.splStep,splSteps.length-1)):0;}catch{quiz=null;}
+   }
+   inverseGrid.replaceChildren();singularCheck.checked=compatible&amp;&amp;p.inverseSingular===true;
+   if(isInverse()){prepareInverseInputs();if(Array.isArray(p.inverseAnswers))Array.from(inverseGrid.children).forEach((input,i)=&gt;{input.value=typeof p.inverseAnswers[i]===&#x27;string&#x27;?p.inverseAnswers[i]:&#x27;&#x27;;});}
    revealed=compatible&amp;&amp;p.revealed===true;answer.value=compatible&amp;&amp;typeof p.answer===&#x27;string&#x27;?p.answer:&#x27;&#x27;;feedback.textContent=&#x27;&#x27;;subSelection=valid(t,size-1)?t:[0,0];if(valid(s,size))render(s[0],s[1]);else render(0,0);syncQuiz();
  }
  restore(window.openai?.widgetState);
@@ -1599,10 +1969,15 @@ html&gt;body{padding:0}&lt;/style&gt;
   let lastPointerWasTouch = false;
   let pinnedByTouch = false;
 
-  const getTrigger = (target) =&gt;
-    target?.nodeType === Node.ELEMENT_NODE
-      ? target.closest(&quot;[data-tooltip]&quot;)
-      : null;
+  const getTrigger = (event) =&gt; {
+    for (const target of event.composedPath()) {
+      if (target?.nodeType === Node.ELEMENT_NODE) {
+        const trigger = target.closest(&quot;[data-tooltip]&quot;);
+        if (trigger) return trigger;
+      }
+    }
+    return null;
+  };
   const containsTarget = (trigger, target) =&gt;
     target?.nodeType != null &amp;&amp; trigger.contains(target);
   const getContent = (trigger) =&gt;
@@ -1747,7 +2122,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     if (event.pointerType === &quot;touch&quot;) {
       return;
     }
-    const trigger = getTrigger(event.target);
+    const trigger = getTrigger(event);
     if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
       return;
     }
@@ -1763,7 +2138,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     if (!isTouch || event.detail === 0) {
       return;
     }
-    const trigger = getTrigger(event.target);
+    const trigger = getTrigger(event);
     if (
       trigger == null ||
       !trigger.isConnected ||
@@ -1787,7 +2162,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     if (pinnedByTouch) {
       return;
     }
-    const trigger = getTrigger(event.target);
+    const trigger = getTrigger(event);
     if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
       return;
     }
@@ -1796,7 +2171,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
   };
   const handleFocusIn = (event) =&gt; {
-    const trigger = getTrigger(event.target);
+    const trigger = getTrigger(event);
     if (trigger?.matches(&quot;:focus-visible&quot;)) {
       requestOpen(trigger, true);
     }
@@ -1808,35 +2183,69 @@ html&gt;body{padding:0}&lt;/style&gt;
   };
   const handleContextMenu = (event) =&gt; {
     lastPointerWasTouch = false;
-    const trigger = getTrigger(event.target);
+    const trigger = getTrigger(event);
     if (activeTrigger === trigger || pendingTrigger === trigger) {
       closeTooltip();
     }
   };
+  const handlers = {
+    pointerover: handlePointerOpen,
+    pointerdown: handlePointer,
+    pointercancel: handlePointer,
+    click: handleTouchClick,
+    pointerout: handleLeave,
+    focusin: handleFocusIn,
+    focusout: handleLeave,
+    keydown: handleKeyDown,
+    contextmenu: handleContextMenu,
+  };
+  const roots = new Map();
+  const handledEvents = new WeakSet();
+  const handleEvent = (event) =&gt; {
+    if (handledEvents.has(event)) return;
+    handledEvents.add(event);
+    handlers[event.type](event);
+  };
+  const discoverRoots = (node) =&gt; {
+    if (node.shadowRoot) listen(node.shadowRoot);
+    for (const element of node.querySelectorAll(&quot;*&quot;)) {
+      if (element.shadowRoot) listen(element.shadowRoot);
+    }
+  };
+  const listen = (root) =&gt; {
+    if (roots.has(root)) return;
+    for (const type of Object.keys(handlers)) root.addEventListener(type, handleEvent);
+    const observer = new window.MutationObserver((records) =&gt; {
+      for (const { addedNodes } of records) {
+        for (const node of addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) discoverRoots(node);
+        }
+      }
+      for (const [root, cleanup] of roots) {
+        if (root.host &amp;&amp; !root.host.isConnected) {
+          cleanup();
+          roots.delete(root);
+        }
+      }
+      if (activeTrigger &amp;&amp; !activeTrigger.isConnected) closeTooltip(false);
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    roots.set(root, () =&gt; {
+      observer.disconnect();
+      for (const type of Object.keys(handlers)) root.removeEventListener(type, handleEvent);
+    });
+    discoverRoots(root);
+  };
   const destroy = () =&gt; {
     closeTooltip(false);
     lastPointerWasTouch = false;
-    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
-    document.removeEventListener(&quot;pointerdown&quot;, handlePointer);
-    document.removeEventListener(&quot;pointercancel&quot;, handlePointer);
-    document.removeEventListener(&quot;click&quot;, handleTouchClick);
-    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
-    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
-    document.removeEventListener(&quot;focusout&quot;, handleLeave);
-    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
-    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    for (const cleanup of roots.values()) cleanup();
+    roots.clear();
     tooltip = null;
   };
 
-  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
-  document.addEventListener(&quot;pointerdown&quot;, handlePointer);
-  document.addEventListener(&quot;pointercancel&quot;, handlePointer);
-  document.addEventListener(&quot;click&quot;, handleTouchClick);
-  document.addEventListener(&quot;pointerout&quot;, handleLeave);
-  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
-  document.addEventListener(&quot;focusout&quot;, handleLeave);
-  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
-  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  // Events between children of one shadow root never reach the document.
+  listen(document);
   window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
 })();
 &lt;/script&gt;
@@ -1906,6 +2315,202 @@ html&gt;body{padding:0}&lt;/style&gt;
     document.removeEventListener(&quot;keydown&quot;, interact);
   }, { once: true });
 })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        mousePointerId = null;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          mousePointerId = null;
+          summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
 &lt;/script&gt;
 &lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
