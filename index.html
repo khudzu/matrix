@@ -5,18 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Latihan Matriks, Polinom dan Turunan</title>
+<title>Latihan Matriks, Polinom dan Grafik Turunan</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Latihan Matriks, Polinom dan Turunan" data-srcdoc="&lt;!doctype html&gt;
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Latihan Matriks, Polinom dan Grafik Turunan" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Latihan Matriks, Polinom dan Turunan&lt;/title&gt;
+&lt;title&gt;Latihan Matriks, Polinom dan Grafik Turunan&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(
@@ -1052,6 +1053,11 @@ textarea.form-control {
   font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
   font-weight: var(--font-weight-normal);
   line-height: 18px;
+}
+
+.form-select option {
+  color: var(--popover-foreground);
+  background-color: var(--popover);
 }
 
 .form-select:not(:disabled):hover {
@@ -2194,6 +2200,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-poly-new&gt;Buat polinom baru&lt;/button&gt;
   &lt;/div&gt;
   &lt;h3 class=&quot;tabular-nums&quot; data-poly-expression aria-live=&quot;polite&quot;&gt;&lt;/h3&gt;
+  &lt;div data-poly-graph&gt;
+    &lt;h3&gt;Grafik puncak, lembah &amp; titik belok&lt;/h3&gt;
+    &lt;svg data-poly-svg role=&quot;img&quot; aria-label=&quot;Grafik polinom dan titik penting&quot; style=&quot;display:block;width:100%;height:340px&quot;&gt;&lt;/svg&gt;
+    &lt;div data-poly-point-labels class=&quot;tabular-nums&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
   &lt;label class=&quot;form-check&quot;&gt;&lt;input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; data-poly-calculus&gt;&lt;span class=&quot;form-check-label&quot;&gt;Tampilkan turunan, titik puncak, lembah &amp; titik belok&lt;/span&gt;&lt;/label&gt;
   &lt;section data-poly-analysis hidden aria-label=&quot;Analisis turunan polinom&quot;&gt;
     &lt;div class=&quot;mk-nested-result tabular-nums&quot; data-poly-derivatives&gt;&lt;/div&gt;
@@ -2202,13 +2213,14 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;div class=&quot;table-responsive&quot;&gt;&lt;table class=&quot;table table-sm tabular-nums&quot;&gt;&lt;caption&gt;Uji tanda turunan pertama&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Interval x&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Tanda f′(x)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Perilaku f(x)&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody data-poly-sign-rows&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
     &lt;div class=&quot;mk-nested-result&quot; data-poly-inflection&gt;&lt;/div&gt;
   &lt;/section&gt;
-  &lt;form class=&quot;viz-controls&quot; data-poly-range&gt;
-    &lt;label class=&quot;form-label&quot;&gt;x minimum&lt;input class=&quot;form-control&quot; type=&quot;number&quot; value=&quot;-5&quot; step=&quot;any&quot; data-x-min&gt;&lt;/label&gt;
-    &lt;label class=&quot;form-label&quot;&gt;x maksimum&lt;input class=&quot;form-control&quot; type=&quot;number&quot; value=&quot;5&quot; step=&quot;any&quot; data-x-max&gt;&lt;/label&gt;
-    &lt;label class=&quot;form-label&quot;&gt;Selang x&lt;input class=&quot;form-control&quot; type=&quot;number&quot; value=&quot;1&quot; step=&quot;any&quot; min=&quot;0.001&quot; data-x-step&gt;&lt;/label&gt;
-    &lt;button class=&quot;btn&quot; type=&quot;submit&quot;&gt;Perbarui tabel&lt;/button&gt;
+  &lt;form class=&quot;viz-controls&quot; data-poly-range novalidate&gt;
+    &lt;label class=&quot;form-label&quot;&gt;x minimum&lt;input class=&quot;form-control&quot; type=&quot;text&quot; inputmode=&quot;decimal&quot; value=&quot;-5&quot; data-x-min&gt;&lt;/label&gt;
+    &lt;label class=&quot;form-label&quot;&gt;x maksimum&lt;input class=&quot;form-control&quot; type=&quot;text&quot; inputmode=&quot;decimal&quot; value=&quot;5&quot; data-x-max&gt;&lt;/label&gt;
+    &lt;label class=&quot;form-label&quot;&gt;Selang x&lt;input class=&quot;form-control&quot; type=&quot;text&quot; inputmode=&quot;decimal&quot; value=&quot;1&quot; data-x-step&gt;&lt;/label&gt;
+    &lt;button class=&quot;btn&quot; type=&quot;button&quot; data-poly-update&gt;Perbarui tabel&lt;/button&gt;
   &lt;/form&gt;
   &lt;div role=&quot;alert&quot; data-poly-error&gt;&lt;/div&gt;
+  &lt;div role=&quot;status&quot; aria-live=&quot;polite&quot; data-poly-table-status&gt;&lt;/div&gt;
   &lt;div class=&quot;table-responsive&quot;&gt;
     &lt;table class=&quot;table table-sm tabular-nums&quot;&gt;&lt;caption&gt;Titik koordinat untuk digambar&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;x&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Substitusi&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;f(x)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Titik (x, y)&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody data-poly-rows&gt;&lt;/tbody&gt;&lt;/table&gt;
   &lt;/div&gt;
@@ -2216,7 +2228,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;script&gt;
 (()=&gt;{
  const root=document.getElementById(&#x27;polynomial-practice&#x27;),$=s=&gt;root.querySelector(s);
- let coefficients=[2,1];
+ let coefficients=[2,1],appliedRange=null;
  const power=p=&gt;p===1?&#x27;x&#x27;:p===2?&#x27;x²&#x27;:p===3?&#x27;x³&#x27;:&#x27;&#x27;;
  const fmt=n=&gt;String(Number(n.toPrecision(10)));
  function polynomialText(c){let text=&#x27;&#x27;;c.forEach((a,i)=&gt;{const p=c.length-1-i;if(a===0)return;const term=(p&amp;&amp;Math.abs(a)===1?&#x27;&#x27;:Math.abs(a))+power(p);text+=(text?(a&lt;0?&#x27; − &#x27;:&#x27; + &#x27;):(a&lt;0?&#x27;−&#x27;:&#x27;&#x27;))+term;});return text||&#x27;0&#x27;;}
@@ -2251,14 +2263,54 @@ html&gt;body{padding:0}&lt;/style&gt;
    a.intervals.forEach(p=&gt;{const row=document.createElement(&#x27;tr&#x27;);[`(${edge(p.lo)}, ${edge(p.hi)})`,p.positive?&#x27;+&#x27;:&#x27;−&#x27;,p.positive?&#x27;Naik&#x27;:&#x27;Turun&#x27;].forEach(text=&gt;{const e=document.createElement(&#x27;td&#x27;);e.textContent=text;row.append(e);});signs.append(row);});
    $(&#x27;[data-poly-inflection]&#x27;).textContent=a.inflection?`Titik belok: (${fmt(a.inflection.x)}, ${fmt(a.inflection.y)}), dari f″(x) = 0. Karena f‴(x) = ${fmt(a.inflection.third)} ≠ 0, kecekungan berubah. Puncak: f′ berubah + ke −. Lembah: f′ berubah − ke +. Jika f′ = f″ = 0 dan f‴ ≠ 0, titik tersebut adalah titik belok stasioner.`:&#x27;Uji turunan kedua: f″ &lt; 0 berarti puncak; f″ &gt; 0 berarti lembah. Polinom derajat 1 dan 2 tidak memiliki titik belok. Ekstrem yang ditampilkan adalah ekstrem lokal pada seluruh domain real.&#x27;;
  }
+ function renderGraph(){
+   const svg=$(&#x27;[data-poly-svg]&#x27;),width=Math.max(280,$(&#x27;[data-poly-graph]&#x27;).getBoundingClientRect().width),height=340;
+   const a=calculus(coefficients),points=a.points.filter(p=&gt;!p.label.includes(&#x27;stasioner&#x27;)).map(p=&gt;({...p,name:p.label.includes(&#x27;Puncak&#x27;)?&#x27;Puncak&#x27;:&#x27;Lembah&#x27;}));
+   if(a.inflection)points.push({...a.inflection,name:a.points.some(p=&gt;Math.abs(p.x-a.inflection.x)&lt;1e-8)?&#x27;Belok stasioner&#x27;:&#x27;Titik belok&#x27;});
+   const xs=points.map(p=&gt;p.x),center=xs.length?(Math.min(...xs)+Math.max(...xs))/2:0,span=xs.length?Math.max(2,(Math.max(...xs)-Math.min(...xs))*.7):3;
+   const lo=appliedRange?(appliedRange[0]===appliedRange[1]?appliedRange[0]-1:appliedRange[0]):xs.length?Math.min(...xs)-span:center-span,hi=appliedRange?(appliedRange[0]===appliedRange[1]?appliedRange[1]+1:appliedRange[1]):xs.length?Math.max(...xs)+span:center+span;
+   const samples=Array.from({length:401},(_,i)=&gt;{const x=lo+(hi-lo)*i/400;return {x,y:evaluate(coefficients,x)}});
+   let ymin=Math.min(...samples.map(p=&gt;p.y),0),ymax=Math.max(...samples.map(p=&gt;p.y),0),pad=(ymax-ymin||1)*.12;ymin-=pad;ymax+=pad;
+   const left=72,right=width-20,top=20,bottom=height-50;
+   const X=x=&gt;left+8+(x-lo)/(hi-lo)*(right-left-16),Y=y=&gt;bottom-8-(y-ymin)/(ymax-ymin)*(bottom-top-16);
+   svg.replaceChildren();svg.setAttribute(&#x27;viewBox&#x27;,`0 0 ${width} ${height}`);
+   const add=(tag,attrs,text)=&gt;{const e=document.createElementNS(&#x27;http://www.w3.org/2000/svg&#x27;,tag);Object.entries(attrs).forEach(([k,v])=&gt;e.setAttribute(k,v));if(text!==undefined)e.textContent=text;svg.append(e);return e;};
+   add(&#x27;title&#x27;,{},&#x27;f(x) = &#x27;+expression());add(&#x27;desc&#x27;,{},points.length?points.map(p=&gt;`${p.name}: (${fmt(p.x)}, ${fmt(p.y)})`).join(&#x27;; &#x27;):&#x27;Garis polinom linier tanpa titik puncak, lembah, atau titik belok.&#x27;);
+   add(&#x27;rect&#x27;,{&#x27;data-chart-frame&#x27;:&#x27;&#x27;,x:left,y:top,width:right-left,height:bottom-top,fill:&#x27;none&#x27;,stroke:&#x27;var(--border)&#x27;});
+   const tick=n=&gt;Math.abs(n)&lt;1e-10?&#x27;0&#x27;:Math.abs(n)&gt;=10000?Number(n).toExponential(1):String(Number(n.toPrecision(3)));
+   for(let i=0;i&lt;4;i++){
+     const x=lo+(hi-lo)*i/3,y=ymin+(ymax-ymin)*i/3;
+     add(&#x27;line&#x27;,{x1:X(x),x2:X(x),y1:top,y2:bottom,stroke:&#x27;var(--border)&#x27;});
+     add(&#x27;text&#x27;,{x:X(x),y:bottom+19,&#x27;text-anchor&#x27;:i===0?&#x27;start&#x27;:i===3?&#x27;end&#x27;:&#x27;middle&#x27;,fill:&#x27;var(--foreground)&#x27;,&#x27;font-size&#x27;:12},tick(x));
+     add(&#x27;line&#x27;,{x1:left,x2:right,y1:Y(y),y2:Y(y),stroke:&#x27;var(--border)&#x27;});
+     add(&#x27;text&#x27;,{x:left-8,y:Y(y)+4,&#x27;text-anchor&#x27;:&#x27;end&#x27;,fill:&#x27;var(--foreground)&#x27;,&#x27;font-size&#x27;:12},tick(y));
+   }
+   if(lo&lt;=0&amp;&amp;hi&gt;=0)add(&#x27;line&#x27;,{x1:X(0),x2:X(0),y1:top,y2:bottom,stroke:&#x27;var(--foreground)&#x27;,&#x27;stroke-opacity&#x27;:.45});
+   if(ymin&lt;=0&amp;&amp;ymax&gt;=0)add(&#x27;line&#x27;,{x1:left,x2:right,y1:Y(0),y2:Y(0),stroke:&#x27;var(--foreground)&#x27;,&#x27;stroke-opacity&#x27;:.45});
+   add(&#x27;text&#x27;,{class:&#x27;axis-title&#x27;,&#x27;data-axis&#x27;:&#x27;x&#x27;,x:(left+right)/2,y:height-5,&#x27;text-anchor&#x27;:&#x27;middle&#x27;,fill:&#x27;var(--foreground)&#x27;,&#x27;font-size&#x27;:12},&#x27;x&#x27;);
+   add(&#x27;text&#x27;,{class:&#x27;axis-title&#x27;,&#x27;data-axis&#x27;:&#x27;y&#x27;,x:18,y:(top+bottom)/2,transform:`rotate(-90 18 ${(top+bottom)/2})`,&#x27;text-anchor&#x27;:&#x27;middle&#x27;,fill:&#x27;var(--foreground)&#x27;,&#x27;font-size&#x27;:12},&#x27;f(x)&#x27;);
+   add(&#x27;path&#x27;,{d:samples.map((p,i)=&gt;(i?&#x27;L&#x27;:&#x27;M&#x27;)+X(p.x)+&#x27;,&#x27;+Y(p.y)).join(&#x27; &#x27;),fill:&#x27;none&#x27;,stroke:&#x27;var(--viz-series-1)&#x27;,&#x27;stroke-width&#x27;:2});
+   const labels=$(&#x27;[data-poly-point-labels]&#x27;);labels.replaceChildren();
+   points.forEach((p,i)=&gt;{
+     const outside=p.x&lt;lo||p.x&gt;hi;
+     const x=X(p.x),y=Y(p.y),color=p.name===&#x27;Puncak&#x27;?&#x27;var(--viz-series-2)&#x27;:p.name===&#x27;Lembah&#x27;?&#x27;var(--viz-series-3)&#x27;:&#x27;var(--viz-series-4)&#x27;;
+     if(!outside){add(&#x27;circle&#x27;,{cx:x,cy:y,r:7,fill:color});
+     add(&#x27;text&#x27;,{x:x+11,y:y-10,fill:&#x27;var(--foreground)&#x27;,&#x27;font-size&#x27;:12},String(i+1));
+     add(&#x27;circle&#x27;,{cx:x,cy:y,r:18,fill:&#x27;transparent&#x27;,&#x27;data-chart-hit&#x27;:&#x27;&#x27;,&#x27;data-tooltip&#x27;:`${p.name}: (${fmt(p.x)}, ${fmt(p.y)})`});}
+     const e=document.createElement(&#x27;div&#x27;);e.textContent=`${i+1}. ${p.name}: (${fmt(p.x)}, ${fmt(p.y)})${outside?&#x27; · di luar rentang grafik&#x27;:&#x27;&#x27;}`;labels.append(e);
+   });
+   if(!points.length){const e=document.createElement(&#x27;div&#x27;);e.textContent=&#x27;Tidak ada puncak, lembah, atau titik belok.&#x27;;labels.append(e);}
+ }
  function substitute(x){return coefficients.map((a,i)=&gt;{const p=coefficients.length-1-i;return `(${a})`+(p?` × (${fmt(x)})`+(p&gt;1?&#x27;^&#x27;+p:&#x27;&#x27;):&#x27;&#x27;);}).join(&#x27; + &#x27;);}
  function table(){
-  const lo=Number($(&#x27;[data-x-min]&#x27;).value),hi=Number($(&#x27;[data-x-max]&#x27;).value),step=Number($(&#x27;[data-x-step]&#x27;).value),error=$(&#x27;[data-poly-error]&#x27;);
+  const parse=s=&gt;{const t=$(s).value.trim().replace(/−/g,&#x27;-&#x27;).replace(&#x27;,&#x27;,&#x27;.&#x27;);return /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(t)?Number(t):NaN;};
+  const lo=parse(&#x27;[data-x-min]&#x27;),hi=parse(&#x27;[data-x-max]&#x27;),step=parse(&#x27;[data-x-step]&#x27;),error=$(&#x27;[data-poly-error]&#x27;);
+  $(&#x27;[data-poly-table-status]&#x27;).textContent=&#x27;&#x27;;
   const empty=[&#x27;[data-x-min]&#x27;,&#x27;[data-x-max]&#x27;,&#x27;[data-x-step]&#x27;].some(s=&gt;$(s).value.trim()===&#x27;&#x27;);
   if(empty||![lo,hi,step].every(Number.isFinite)||step&lt;=0||hi&lt;lo||Math.max(Math.abs(lo),Math.abs(hi))&gt;10000){error.textContent=&#x27;Isi rentang x antara −10000 dan 10000, minimum ≤ maksimum, dan selang positif.&#x27;;return false;}
   const count=Math.floor((hi-lo)/step+1e-9)+1;
   if(count&gt;101){error.textContent=&#x27;Maksimal 101 titik. Perbesar selang atau perkecil rentang x.&#x27;;return false;}
-  error.textContent=&#x27;&#x27;;const body=$(&#x27;[data-poly-rows]&#x27;);body.replaceChildren();
+  appliedRange=[lo,hi];error.textContent=&#x27;&#x27;;const body=$(&#x27;[data-poly-rows]&#x27;);body.replaceChildren();
   for(let i=0;i&lt;count;i++){
    const x=Number((lo+i*step).toPrecision(12));
    if(x&gt;hi+1e-10)break;
@@ -2267,13 +2319,16 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
   return true;
  }
- function render(){ $(&#x27;[data-poly-expression]&#x27;).textContent=&#x27;f(x) = &#x27;+expression();table();renderCalculus(); }
+ function render(){ $(&#x27;[data-poly-expression]&#x27;).textContent=&#x27;f(x) = &#x27;+expression();table();renderCalculus();renderGraph(); }
  $(&#x27;[data-poly-calculus]&#x27;).addEventListener(&#x27;change&#x27;,()=&gt;{renderCalculus();save();});
  function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{...(window.openai.widgetState?.modelContent||{}),polinom:coefficients,rentang:[$(&#x27;[data-x-min]&#x27;).value,$(&#x27;[data-x-max]&#x27;).value,$(&#x27;[data-x-step]&#x27;).value]},privateContent:{...(window.openai.widgetState?.privateContent||{}),polynomial:{coefficients,calculus:$(&#x27;[data-poly-calculus]&#x27;).checked,min:$(&#x27;[data-x-min]&#x27;).value,max:$(&#x27;[data-x-max]&#x27;).value,step:$(&#x27;[data-x-step]&#x27;).value}}}).catch(()=&gt;{});}
  $(&#x27;[data-poly-new]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{const degree=Number($(&#x27;[data-degree]&#x27;).value);coefficients=Array.from({length:degree+1},()=&gt;Math.floor(Math.random()*11)-5);coefficients[0]=Math.random()&lt;.5?-(1+Math.floor(Math.random()*4)):1+Math.floor(Math.random()*4);render();save();});
- $(&#x27;[data-poly-range]&#x27;).addEventListener(&#x27;submit&#x27;,event=&gt;{event.preventDefault();if(table())save();});
+ function updateTable(){if(table()){renderGraph();$(&#x27;[data-poly-table-status]&#x27;).textContent=`Tabel diperbarui: ${$(&#x27;[data-poly-rows]&#x27;).children.length} titik. Grafik mengikuti rentang x yang dipilih.`;save();}}
+ $(&#x27;[data-poly-update]&#x27;).addEventListener(&#x27;click&#x27;,updateTable);
+ $(&#x27;[data-poly-range]&#x27;).addEventListener(&#x27;submit&#x27;,event=&gt;{event.preventDefault();updateTable();});
+ [&#x27;[data-x-min]&#x27;,&#x27;[data-x-max]&#x27;,&#x27;[data-x-step]&#x27;].forEach(selector=&gt;$(selector).addEventListener(&#x27;keydown&#x27;,event=&gt;{if(event.key===&#x27;Enter&#x27;){event.preventDefault();updateTable();}}));
  function restore(state){const p=state?.privateContent?.polynomial;if(p&amp;&amp;Array.isArray(p.coefficients)&amp;&amp;[2,3,4].includes(p.coefficients.length)&amp;&amp;p.coefficients.every(v=&gt;Number.isInteger(v)&amp;&amp;Math.abs(v)&lt;=5)&amp;&amp;p.coefficients[0]!==0){coefficients=p.coefficients;$(&#x27;[data-poly-calculus]&#x27;).checked=p.calculus===true;$(&#x27;[data-degree]&#x27;).value=String(coefficients.length-1);$(&#x27;[data-x-min]&#x27;).value=p.min;$(&#x27;[data-x-max]&#x27;).value=p.max;$(&#x27;[data-x-step]&#x27;).value=p.step;}render();}
- restore(window.openai?.widgetState);window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);});
+ restore(window.openai?.widgetState);if(typeof ResizeObserver!==&#x27;undefined&#x27;)new ResizeObserver(()=&gt;renderGraph()).observe($(&#x27;[data-poly-graph]&#x27;));window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);});
 })();
 &lt;/script&gt;
 
@@ -2865,16 +2920,25 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
+
 <script>(() => {
   const frame = document.getElementById("codex-visualization");
   if (!(frame instanceof HTMLIFrameElement)) {
     return;
   }
+  const isShare = document.documentElement.classList.contains(
+    "visualization-share-root",
+  );
   let viewportHeight = globalThis.innerHeight;
+  let sizeFingerprint = null;
+  let sizeWriteTimeout;
+  let lastSize = null;
+  let pendingSize = null;
   const storageKey = `codex:visualization-widget-state-v2:${JSON.stringify([
     globalThis.location.pathname,
     globalThis.location.search,
   ])}`;
+  const sizeStorageKey = `${storageKey}:share-size-v1`;
   const parseState = (serializedState) => {
     if (
       typeof serializedState !== "string" ||
@@ -2931,6 +2995,21 @@ html&gt;body{padding:0}&lt;/style&gt;
   } catch {
     storage = null;
   }
+  const persistSize = () => {
+    globalThis.clearTimeout(sizeWriteTimeout);
+    if (pendingSize == null) {
+      return;
+    }
+    try {
+      storage?.setItem(sizeStorageKey, pendingSize);
+    } catch {
+      // A denied or full cache must not affect the visualization.
+    }
+    pendingSize = null;
+  };
+  if (isShare) {
+    globalThis.addEventListener("pagehide", persistSize);
+  }
   const initialGlobals = {
     widgetState: state,
     statePersistence: storage == null ? "none" : "local",
@@ -2966,12 +3045,39 @@ html&gt;body{padding:0}&lt;/style&gt;
     if (data.type === "height") {
       const height = data.height;
       if (
-        typeof height === "number" &&
-        Number.isFinite(height) &&
-        height >= 0 &&
-        height <= 10_000
+        typeof height !== "number" ||
+        !Number.isFinite(height) ||
+        height < 0
       ) {
+        return;
+      }
+      if (height <= 10_000) {
+        const width = isShare && storage != null ? frame.clientWidth : null;
         frame.style.height = Math.ceil(height) + "px";
+        if (isShare && storage != null) {
+          const size = JSON.stringify({
+            fingerprint: sizeFingerprint,
+            width,
+            viewportHeight: globalThis.innerHeight,
+            dark: globalThis.matchMedia("(prefers-color-scheme: dark)").matches,
+            scale: globalThis.devicePixelRatio,
+            height: Math.ceil(height),
+          });
+          if (size !== lastSize) {
+            lastSize = size;
+            pendingSize = size;
+            globalThis.clearTimeout(sizeWriteTimeout);
+            sizeWriteTimeout = globalThis.setTimeout(persistSize, 100);
+          }
+        }
+      }
+      if (isShare) {
+        // Keep unusually tall content accessible without accepting an unbounded height.
+        if (height > 10_000 && Number.parseFloat(frame.style.height) === 0) {
+          frame.style.removeProperty("height");
+        }
+        frame.scrolling = height > 10_000 ? "auto" : "no";
+        document.documentElement.classList.add("visualization-share-ready");
       }
       return;
     }
@@ -3036,7 +3142,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
   globalThis.addEventListener("resize", () => {
     const height = Number.parseFloat(frame.style.height);
-    if (!Number.isFinite(height) || height <= viewportHeight) {
+    if (!isShare && (!Number.isFinite(height) || height <= viewportHeight)) {
       frame.style.removeProperty("height");
     }
     viewportHeight = globalThis.innerHeight;
@@ -3054,13 +3160,42 @@ html&gt;body{padding:0}&lt;/style&gt;
     { once: true },
   );
   // Match the trusted bootstrap element, not the same text in an authored title.
-  frame.srcdoc = srcdoc.replace(
+  const frameHtml = srcdoc.replace(
     '<script type="application/json" id="codex-visualization-widget-state">__CODEX_VISUALIZATION_WIDGET_STATE__<\/script>',
     () =>
       '<script type="application/json" id="codex-visualization-widget-state">' +
       JSON.stringify(initialGlobals).replaceAll("<", "\\u003c") +
       "<\/script>",
   );
+  if (isShare && storage != null) {
+    // Fingerprint the rendered document, including restored widget state, without
+    // storing its content. This is a layout cache, not a security identity.
+    let hash = 5381;
+    for (let index = 0; index < frameHtml.length; index += 1) {
+      hash = (hash * 33 + frameHtml.charCodeAt(index)) % 4_294_967_296;
+    }
+    sizeFingerprint = hash.toString(36);
+    try {
+      const size = JSON.parse(storage.getItem(sizeStorageKey) ?? "null");
+      if (
+        size?.fingerprint === sizeFingerprint &&
+        size.width === frame.clientWidth &&
+        size.viewportHeight === globalThis.innerHeight &&
+        size.dark ===
+          globalThis.matchMedia("(prefers-color-scheme: dark)").matches &&
+        size.scale === globalThis.devicePixelRatio &&
+        typeof size.height === "number" &&
+        Number.isFinite(size.height) &&
+        size.height >= 0 &&
+        size.height <= 10_000
+      ) {
+        frame.style.height = size.height + "px";
+      }
+    } catch {
+      // Ignore missing or invalid cache entries and measure the live frame.
+    }
+  }
+  frame.srcdoc = frameHtml;
   delete frame.dataset.srcdoc;
 })();
 </script>
