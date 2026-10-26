@@ -2264,10 +2264,29 @@ html&gt;body{padding:0}&lt;/style&gt;
    a.intervals.forEach(p=&gt;{const row=document.createElement(&#x27;tr&#x27;);[`(${edge(p.lo)}, ${edge(p.hi)})`,p.positive?&#x27;+&#x27;:&#x27;−&#x27;,p.positive?&#x27;Naik&#x27;:&#x27;Turun&#x27;].forEach(text=&gt;{const e=document.createElement(&#x27;td&#x27;);e.textContent=text;row.append(e);});signs.append(row);});
    $(&#x27;[data-poly-inflection]&#x27;).textContent=a.inflection?`Titik belok: (${fmt(a.inflection.x)}, ${fmt(a.inflection.y)}), dari f″(x) = 0. Karena f‴(x) = ${fmt(a.inflection.third)} ≠ 0, kecekungan berubah. Puncak: f′ berubah + ke −. Lembah: f′ berubah − ke +. Jika f′ = f″ = 0 dan f‴ ≠ 0, titik tersebut adalah titik belok stasioner.`:&#x27;Uji turunan kedua: f″ &lt; 0 berarti puncak; f″ &gt; 0 berarti lembah. Polinom derajat 1 dan 2 tidak memiliki titik belok. Ekstrem yang ditampilkan adalah ekstrem lokal pada seluruh domain real.&#x27;;
  }
+ function realRoots(c){
+   if(c.length===2)return [-c[1]/c[0]];
+   const bound=1+Math.max(...c.slice(1).map(v=&gt;Math.abs(v/c[0])));
+   const critical=calculus(c).points.map(p=&gt;p.x).filter(x=&gt;x&gt;-bound&amp;&amp;x&lt;bound).sort((a,b)=&gt;a-b);
+   const edges=[-bound,...critical,bound],roots=[];
+   const nearZero=x=&gt;Math.abs(evaluate(c,x))&lt;=1e-10*Math.max(1,...c.map((v,i)=&gt;Math.abs(v*x**(c.length-1-i))));
+   const put=x=&gt;{if(!roots.some(r=&gt;Math.abs(r-x)&lt;1e-7))roots.push(Math.abs(x)&lt;1e-10?0:x);};
+   edges.forEach(x=&gt;{if(nearZero(x))put(x);});
+   for(let i=0;i&lt;edges.length-1;i++){
+     let lo=edges[i],hi=edges[i+1],fl=evaluate(c,lo),fh=evaluate(c,hi);
+     if(nearZero(lo)||nearZero(hi)||Math.sign(fl)===Math.sign(fh))continue;
+     for(let j=0;j&lt;90;j++){const mid=(lo+hi)/2,fm=evaluate(c,mid);if(fm===0){lo=hi=mid;break;}if(Math.sign(fm)===Math.sign(fl)){lo=mid;fl=fm;}else hi=mid;}
+     put((lo+hi)/2);
+   }
+   return roots.sort((a,b)=&gt;a-b);
+ }
  function renderGraph(){
    const svg=$(&#x27;[data-poly-svg]&#x27;),width=Math.max(280,$(&#x27;[data-poly-graph]&#x27;).getBoundingClientRect().width),height=340;
    const a=calculus(coefficients),points=a.points.filter(p=&gt;!p.label.includes(&#x27;stasioner&#x27;)).map(p=&gt;({...p,name:p.label.includes(&#x27;Puncak&#x27;)?&#x27;Puncak&#x27;:&#x27;Lembah&#x27;}));
    if(a.inflection)points.push({...a.inflection,name:a.points.some(p=&gt;Math.abs(p.x-a.inflection.x)&lt;1e-8)?&#x27;Belok stasioner&#x27;:&#x27;Titik belok&#x27;});
+   const intercepts=realRoots(coefficients);
+   intercepts.forEach(x=&gt;points.push({x,y:0,name:&#x27;Potong sumbu x&#x27;,axis:&#x27;x&#x27;}));
+   points.push({x:0,y:evaluate(coefficients,0),name:&#x27;Potong sumbu y&#x27;,axis:&#x27;y&#x27;});
    const xs=points.map(p=&gt;p.x),center=xs.length?(Math.min(...xs)+Math.max(...xs))/2:0,span=xs.length?Math.max(2,(Math.max(...xs)-Math.min(...xs))*.7):3;
    const lo=appliedRange?(appliedRange[0]===appliedRange[1]?appliedRange[0]-1:appliedRange[0]):xs.length?Math.min(...xs)-span:center-span,hi=appliedRange?(appliedRange[0]===appliedRange[1]?appliedRange[1]+1:appliedRange[1]):xs.length?Math.max(...xs)+span:center+span;
    const samples=Array.from({length:401},(_,i)=&gt;{const x=lo+(hi-lo)*i/400;return {x,y:evaluate(coefficients,x)}});
@@ -2294,12 +2313,14 @@ html&gt;body{padding:0}&lt;/style&gt;
    const labels=$(&#x27;[data-poly-point-labels]&#x27;);labels.replaceChildren();
    points.forEach((p,i)=&gt;{
      const outside=p.x&lt;lo||p.x&gt;hi;
-     const x=X(p.x),y=Y(p.y),color=p.name===&#x27;Puncak&#x27;?&#x27;var(--viz-series-2)&#x27;:p.name===&#x27;Lembah&#x27;?&#x27;var(--viz-series-3)&#x27;:&#x27;var(--viz-series-4)&#x27;;
-     if(!outside){add(&#x27;circle&#x27;,{cx:x,cy:y,r:7,fill:color});
-     add(&#x27;text&#x27;,{x:x+11,y:y-10,fill:&#x27;var(--foreground)&#x27;,&#x27;font-size&#x27;:12},String(i+1));
+     const x=X(p.x),y=Y(p.y),color=p.axis===&#x27;x&#x27;?&#x27;var(--viz-series-5)&#x27;:p.axis===&#x27;y&#x27;?&#x27;var(--viz-series-6)&#x27;:p.name===&#x27;Puncak&#x27;?&#x27;var(--viz-series-2)&#x27;:p.name===&#x27;Lembah&#x27;?&#x27;var(--viz-series-3)&#x27;:&#x27;var(--viz-series-4)&#x27;;
+     if(!outside){if(p.axis)add(&#x27;rect&#x27;,{x:x-5,y:y-5,width:10,height:10,fill:color});else add(&#x27;circle&#x27;,{cx:x,cy:y,r:7,fill:color});
+     const coincident=points.slice(0,i).some(q=&gt;Math.abs(q.x-p.x)&lt;1e-7&amp;&amp;Math.abs(q.y-p.y)&lt;1e-7);
+     if(!coincident)add(&#x27;text&#x27;,{x:x&gt;right-32?x-11:x+11,y:Math.max(top+14,y-10),&#x27;text-anchor&#x27;:x&gt;right-32?&#x27;end&#x27;:&#x27;start&#x27;,fill:&#x27;var(--foreground)&#x27;,&#x27;font-size&#x27;:12},points.map((q,j)=&gt;Math.abs(q.x-p.x)&lt;1e-7&amp;&amp;Math.abs(q.y-p.y)&lt;1e-7?j+1:null).filter(Boolean).join(&#x27;/&#x27;));
      add(&#x27;circle&#x27;,{cx:x,cy:y,r:18,fill:&#x27;transparent&#x27;,&#x27;data-chart-hit&#x27;:&#x27;&#x27;,&#x27;data-tooltip&#x27;:`${p.name}: (${fmt(p.x)}, ${fmt(p.y)})`});}
      const e=document.createElement(&#x27;div&#x27;);e.textContent=`${i+1}. ${p.name}: (${fmt(p.x)}, ${fmt(p.y)})${outside?&#x27; · di luar rentang grafik&#x27;:&#x27;&#x27;}`;labels.append(e);
    });
+   if(!intercepts.length){const e=document.createElement(&#x27;div&#x27;);e.textContent=&#x27;Tidak ada titik potong sumbu x (akar real).&#x27;;labels.append(e);}
    if(!points.length){const e=document.createElement(&#x27;div&#x27;);e.textContent=&#x27;Tidak ada puncak, lembah, atau titik belok.&#x27;;labels.append(e);}
  }
  function substitute(x){return coefficients.map((a,i)=&gt;{const p=coefficients.length-1-i;return `(${a})`+(p?` × (${fmt(x)})`+(p&gt;1?&#x27;^&#x27;+p:&#x27;&#x27;):&#x27;&#x27;);}).join(&#x27; + &#x27;);}
