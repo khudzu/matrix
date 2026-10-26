@@ -2200,6 +2200,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-poly-new&gt;Buat polinom baru&lt;/button&gt;
   &lt;/div&gt;
   &lt;h3 class=&quot;tabular-nums&quot; data-poly-expression aria-live=&quot;polite&quot;&gt;&lt;/h3&gt;
+  &lt;div class=&quot;tabular-nums&quot; data-poly-factored&gt;&lt;/div&gt;
   &lt;div data-poly-graph&gt;
     &lt;h3&gt;Grafik puncak, lembah &amp; titik belok&lt;/h3&gt;
     &lt;svg data-poly-svg role=&quot;img&quot; aria-label=&quot;Grafik polinom dan titik penting&quot; style=&quot;display:block;width:100%;height:340px&quot;&gt;&lt;/svg&gt;
@@ -2319,15 +2320,24 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
   return true;
  }
- function render(){ $(&#x27;[data-poly-expression]&#x27;).textContent=&#x27;f(x) = &#x27;+expression();table();renderCalculus();renderGraph(); }
+ function render(){ $(&#x27;[data-poly-expression]&#x27;).textContent=&#x27;f(x) = &#x27;+expression();
+   const a=calculus(coefficients),factor=x=&gt;`(x ${x&lt;0?&#x27;+&#x27;:&#x27;−&#x27;} ${fmt(Math.abs(x))})`;
+   $(&#x27;[data-poly-factored]&#x27;).textContent=coefficients.length===2?`f′(x) = ${coefficients[0]} (konstan; tidak memiliki akar).`:a.points.length===coefficients.length-2?`Faktorisasi turunan pertama: f′(x) = ${a.d1[0]} × ${a.points.map(p=&gt;factor(p.x)).join(&#x27; × &#x27;)}`:&#x27;&#x27;;
+   table();renderCalculus();renderGraph(); }
  $(&#x27;[data-poly-calculus]&#x27;).addEventListener(&#x27;change&#x27;,()=&gt;{renderCalculus();save();});
  function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{...(window.openai.widgetState?.modelContent||{}),polinom:coefficients,rentang:[$(&#x27;[data-x-min]&#x27;).value,$(&#x27;[data-x-max]&#x27;).value,$(&#x27;[data-x-step]&#x27;).value]},privateContent:{...(window.openai.widgetState?.privateContent||{}),polynomial:{coefficients,calculus:$(&#x27;[data-poly-calculus]&#x27;).checked,min:$(&#x27;[data-x-min]&#x27;).value,max:$(&#x27;[data-x-max]&#x27;).value,step:$(&#x27;[data-x-step]&#x27;).value}}}).catch(()=&gt;{});}
- $(&#x27;[data-poly-new]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{const degree=Number($(&#x27;[data-degree]&#x27;).value);coefficients=Array.from({length:degree+1},()=&gt;Math.floor(Math.random()*11)-5);coefficients[0]=Math.random()&lt;.5?-(1+Math.floor(Math.random()*4)):1+Math.floor(Math.random()*4);render();save();});
+ $(&#x27;[data-poly-new]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{
+   const degree=Number($(&#x27;[data-degree]&#x27;).value),integer=()=&gt;Math.floor(Math.random()*7)-3,k=(Math.random()&lt;.5?-1:1)*(1+Math.floor(Math.random()*2)),r=integer(),constant=integer();
+   if(degree===1)coefficients=[k,constant];
+   else if(degree===2)coefficients=[k,-2*k*r,constant];
+   else{let s=integer();while(s===r)s=integer();coefficients=[2*k,-3*k*(r+s),6*k*r*s,constant];}
+   render();save();
+ });
  function updateTable(){if(table()){renderGraph();$(&#x27;[data-poly-table-status]&#x27;).textContent=`Tabel diperbarui: ${$(&#x27;[data-poly-rows]&#x27;).children.length} titik. Grafik mengikuti rentang x yang dipilih.`;save();}}
  $(&#x27;[data-poly-update]&#x27;).addEventListener(&#x27;click&#x27;,updateTable);
  $(&#x27;[data-poly-range]&#x27;).addEventListener(&#x27;submit&#x27;,event=&gt;{event.preventDefault();updateTable();});
  [&#x27;[data-x-min]&#x27;,&#x27;[data-x-max]&#x27;,&#x27;[data-x-step]&#x27;].forEach(selector=&gt;$(selector).addEventListener(&#x27;keydown&#x27;,event=&gt;{if(event.key===&#x27;Enter&#x27;){event.preventDefault();updateTable();}}));
- function restore(state){const p=state?.privateContent?.polynomial;if(p&amp;&amp;Array.isArray(p.coefficients)&amp;&amp;[2,3,4].includes(p.coefficients.length)&amp;&amp;p.coefficients.every(v=&gt;Number.isInteger(v)&amp;&amp;Math.abs(v)&lt;=5)&amp;&amp;p.coefficients[0]!==0){coefficients=p.coefficients;$(&#x27;[data-poly-calculus]&#x27;).checked=p.calculus===true;$(&#x27;[data-degree]&#x27;).value=String(coefficients.length-1);$(&#x27;[data-x-min]&#x27;).value=p.min;$(&#x27;[data-x-max]&#x27;).value=p.max;$(&#x27;[data-x-step]&#x27;).value=p.step;}render();}
+ function restore(state){const p=state?.privateContent?.polynomial;if(p&amp;&amp;Array.isArray(p.coefficients)&amp;&amp;[2,3,4].includes(p.coefficients.length)&amp;&amp;p.coefficients.every(v=&gt;Number.isInteger(v)&amp;&amp;Math.abs(v)&lt;=500)&amp;&amp;p.coefficients[0]!==0){coefficients=p.coefficients;$(&#x27;[data-poly-calculus]&#x27;).checked=p.calculus===true;$(&#x27;[data-degree]&#x27;).value=String(coefficients.length-1);$(&#x27;[data-x-min]&#x27;).value=p.min;$(&#x27;[data-x-max]&#x27;).value=p.max;$(&#x27;[data-x-step]&#x27;).value=p.step;}render();}
  restore(window.openai?.widgetState);if(typeof ResizeObserver!==&#x27;undefined&#x27;)new ResizeObserver(()=&gt;renderGraph()).observe($(&#x27;[data-poly-graph]&#x27;));window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);});
 })();
 &lt;/script&gt;
